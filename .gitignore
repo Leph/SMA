@@ -10,3 +10,17 @@
 *.lai
 *.la
 *.a
+
+# Vim tmp
+*.swp
+
+# CMake Compilation files
+CMakeFiles/*
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Runtime Ogre files
+bin/ogre.cfg
+bin/Ogre.log
+
