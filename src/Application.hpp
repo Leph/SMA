@@ -1,6 +1,9 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
+#include <Ogre.h>
+#include "InputListener.hpp"
+
 /**
  * Classe principale représentant l'application Ogre
  */
@@ -47,9 +50,9 @@ private:
     Ogre::Camera* _camera;
 
     /**
-     *
+     * Gestion des entrées utilisateurs
      */
-    //InputListener* _inputListener;
+    InputListener* _inputListener;
 
     /**
      * Initialisation l'application
@@ -79,9 +82,9 @@ private:
     void createCamera();
 
     /**
-     *
+     * Création et initialisation de la gestion des inputs
      */
-    //void createFrameListener();
+    void createFrameListener();
 };
 
 #endif

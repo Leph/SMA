@@ -1,5 +1,6 @@
 #include <Ogre.h>
 
+#include "InputListener.hpp"
 #include "Application.hpp"
 
 using Ogre::Root;
@@ -20,8 +21,8 @@ Application::Application() :
     _root(0),
     _window(0),
     _scene(0),
-    _camera(0)
-//    _inputListener(0)
+    _camera(0),
+    _inputListener(0)
 {
     setup();
 }
@@ -33,10 +34,14 @@ Application::~Application()
 
 void Application::setup()
 {
+    //Création de l'objet racine principale
     _root = new Root("plugins.cfg", "ogre.cfg", "Ogre.log");
 
     loadResources();
     createRenderWindow();
+    createScene();
+    createCamera();
+    createFrameListener();
     
     //Chargement des ressources
     TextureManager::getSingleton().setDefaultNumMipmaps(5);
@@ -69,11 +74,10 @@ void Application::createRenderWindow()
 {
     //Chargement de la configuration
     if(!_root->restoreConfig() && !_root->showConfigDialog()) {
-        std::cout << "RATEEEEEEEEEEEEEEE" << std::endl;
         throw new Exception(
             Exception::ERR_INVALIDPARAMS, 
             "Unable to configure Ogre Application", 
-            "Pouet"
+            ""
         );
     }
 
@@ -96,21 +100,18 @@ void Application::createCamera()
     _camera->setFarClipDistance(10000);
 
     Viewport* vp = _window->addViewport(_camera);
-    _camera->setAspectRatio(Real(vp->getActualWidth()) / Real(vp->getActualHeight()));
+    _camera->setAspectRatio(Real(vp->getActualWidth())/Real(vp->getActualHeight()));
     vp->setBackgroundColour(ColourValue(0,0,0));
 }
 
-/*void Application::createFrameListener()
+void Application::createFrameListener()
 {
     _inputListener = new InputListener(_window, _camera);
     _root->addFrameListener(_inputListener);
-}*/
+}
 
 void Application::run()
 {
-    createScene();
-    createCamera();
-
     Entity* ent = _scene->createEntity("ogrehead", "ogrehead.mesh");
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
