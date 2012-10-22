@@ -25,8 +25,8 @@ InputListener::InputListener(RenderWindow* window, Camera* camera) :
     _keyboard(0)
 {
     //Paramètre de configuration
-    CAMERA_KEYBOARD_VELOCITY = 0.2;
-    CAMERA_MOUSE_VELOCITY = 0.1;
+    CAMERA_KEYBOARD_VELOCITY = 200;
+    CAMERA_MOUSE_VELOCITY = 50;
 
     //Initialisation de la gestion des entrées
     startOIS();
@@ -92,22 +92,28 @@ bool InputListener::frameRenderingQueued(const FrameEvent& event)
         return false;
     }
     if (_keyboard->isKeyDown(OIS::KC_Z)) {
-        _camera->moveRelative(Vector3(0, 0, -CAMERA_KEYBOARD_VELOCITY));
+        _camera->moveRelative(
+            Vector3(0, 0, -CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame));
     }
     if (_keyboard->isKeyDown(OIS::KC_S)) {
-        _camera->moveRelative(Vector3(0, 0, CAMERA_KEYBOARD_VELOCITY));
+        _camera->moveRelative(
+            Vector3(0, 0, CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame));
     }
     if (_keyboard->isKeyDown(OIS::KC_Q)) {
-        _camera->moveRelative(Vector3(-CAMERA_KEYBOARD_VELOCITY, 0, 0));
+        _camera->moveRelative(
+            Vector3(-CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame, 0, 0));
     }
     if (_keyboard->isKeyDown(OIS::KC_D)) {
-        _camera->moveRelative(Vector3(CAMERA_KEYBOARD_VELOCITY, 0, 0));
+        _camera->moveRelative(
+            Vector3(CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame, 0, 0));
     }
     
     //Gère la réponse aux évènements sourie
     const MouseState& ms = _mouse->getMouseState();
-    _camera->yaw(Degree(-CAMERA_MOUSE_VELOCITY*ms.X.rel));
-    _camera->pitch(Degree(-CAMERA_MOUSE_VELOCITY*ms.Y.rel));
+    _camera->yaw(
+        Degree(-CAMERA_MOUSE_VELOCITY*ms.X.rel*event.timeSinceLastFrame));
+    _camera->pitch(
+        Degree(-CAMERA_MOUSE_VELOCITY*ms.Y.rel*event.timeSinceLastFrame));
  
     return true;
 }

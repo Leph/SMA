@@ -94,7 +94,6 @@ private:
      * Initialise OIS
      */
     void startOIS();
-
 };
 
 #endif
