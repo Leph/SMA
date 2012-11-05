@@ -16,6 +16,11 @@ class Atom
         Atom(Ogre::Real radius, Ogre::Vector3 position);
 
         /**
+         * Supprime le Node des données d'Ogre
+         */
+        ~Atom();
+
+        /**
          * Renvoi le rayon
          */
         Ogre::Real getRadius() const;

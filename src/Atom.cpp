@@ -16,6 +16,12 @@ Atom::Atom(Real radius, Vector3 position) :
     initNode();
 }
 
+Atom::~Atom()
+{
+    _node->removeAllChildren();
+    Global::getSceneManager()->destroySceneNode(_node);
+}
+
 Real Atom::getRadius() const
 {
     return _radius;
