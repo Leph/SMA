@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <Ogre.h>
 
 #include "Application.hpp"
@@ -13,16 +14,16 @@
     int main(int argc, char *argv[])
 #endif
 {
+    //Initialisation le générateur aléatoire
+    srand(0);
+
+    //Créer et lance l'application
     Application app;
     try {
         app.run();
     } catch(Ogre::Exception& e) {
-    #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
-        MessageBox(NULL, e.getFullDescription().c_str(), "An exception has occured!", MB_OK | MB_ICONERROR | MB_TASKMODAL);
-    #else
         std::cerr << "An exception has occured: " <<
             e.getFullDescription().c_str() << std::endl;
-    #endif
     }
 
     return 0;
