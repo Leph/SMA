@@ -3,6 +3,7 @@
 
 #include <Ogre.h>
 #include "InputListener.hpp"
+#include "AtomManager.hpp"
 
 /**
  * Classe principale représentant l'application Ogre
@@ -53,6 +54,11 @@ private:
      * Gestion des entrées utilisateurs
      */
     InputListener* _inputListener;
+
+    /**
+     * Conteneur des atomes
+     */
+    AtomManager* _atoms;
 
     /**
      * Initialisation l'application

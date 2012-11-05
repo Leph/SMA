@@ -21,13 +21,15 @@ Application::Application() :
     _window(0),
     _scene(0),
     _camera(0),
-    _inputListener(0)
+    _inputListener(0),
+    _atoms(0)
 {
     setup();
 }
 
 Application::~Application()
 {
+    delete _atoms;
     delete _root;
 }
 
@@ -45,6 +47,10 @@ void Application::setup()
     //Chargement des ressources
     TextureManager::getSingleton().setDefaultNumMipmaps(5);
     ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+
+    //Création et enregistrement global du conteneur d'atome
+    _atoms = new AtomManager();
+    Global::setAtomManager(_atoms);
 }
 
 void Application::loadResources()
@@ -118,7 +124,8 @@ void Application::run()
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    Atom a(1, Vector3(0, 0, 100));
+    Atom* a = new Atom(1, Vector3(0, 0, 100));
+    _atoms->add(a);
 
     //Boucle de rendu
     while(true)
