@@ -1,7 +1,6 @@
-#include <Ogre.h>
-
-#include "InputListener.hpp"
 #include "Application.hpp"
+#include "Global.hpp"
+#include "Atom.hpp"
 
 using Ogre::Root;
 using Ogre::String;
@@ -89,6 +88,9 @@ void Application::createScene()
 {
     _scene = _root->createSceneManager("DefaultSceneManager", "scene_manager");
     _scene->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
+
+    //Défini le scene manager comme global
+    Global::setSceneManager(_scene);
 }
 
 void Application::createCamera()
@@ -115,6 +117,8 @@ void Application::run()
     Entity* ent = _scene->createEntity("ogrehead", "ogrehead.mesh");
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
+
+    Atom a(1, Vector3(0, 0, 100));
 
     //Boucle de rendu
     while(true)
