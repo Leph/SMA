@@ -4,6 +4,11 @@
 #include <Ogre.h>
 #include <OIS/OIS.h>
 
+/**
+ * InsputListener
+ * Gestion des entrées
+ * à chaque frames
+ */
 class InputListener : public 
     Ogre::FrameListener, 
     Ogre::WindowEventListener, 

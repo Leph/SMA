@@ -1,6 +1,3 @@
-#include <Ogre.h>
-#include <OIS/OIS.h>
-
 #include "InputListener.hpp"
 
 using Ogre::RenderWindow;

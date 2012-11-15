@@ -22,6 +22,7 @@ Application::Application() :
     _scene(0),
     _camera(0),
     _inputListener(0),
+    _simulationListener(0),
     _atoms(0)
 {
     setup();
@@ -92,7 +93,7 @@ void Application::createRenderWindow()
 
 void Application::createScene()
 {
-    _scene = _root->createSceneManager("DefaultSceneManager", "scene_manager");
+    _scene = _root->createSceneManager("OctreeSceneManager", "scene_manager");
     _scene->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
 
     //Défini le scene manager comme global
@@ -114,18 +115,19 @@ void Application::createCamera()
 
 void Application::createFrameListener()
 {
+    //Gestion des entrées
     _inputListener = new InputListener(_window, _camera);
     _root->addFrameListener(_inputListener);
+
+    //Gestion de la simulation
+    _simulationListener = new SimulationListener();
+    _root->addFrameListener(_simulationListener);
 }
 
 void Application::run()
 {
-    Entity* ent = _scene->createEntity("ogrehead", "ogrehead.mesh");
-    SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
-    node->attachObject(ent);
-
-    Atom* a = new Atom(1, Vector3(0, 0, 100));
-    _atoms->add(a);
+    //Initialisation de la scene etde la simulation
+    initSimulation();
 
     //Boucle de rendu
     while(true)
@@ -138,5 +140,26 @@ void Application::run()
             return ;
         }
     }
+}
+
+void Application::initSimulation()
+{
+    Entity* ent = _scene->createEntity("ogrehead", "ogrehead.mesh");
+    SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
+    node->attachObject(ent);
+
+    Atom* a1 = new Atom(0.5, Vector3(0, 100, 0));
+    _atoms->add(a1);
+    Atom* a2 = new Atom(0.6, Vector3(0, 0, 100));
+    _atoms->add(a2);
+    Atom* a3 = new Atom(0.7, Vector3(100, 0, 0));
+    _atoms->add(a3);
+
+    std::cout << "Size: " << _atoms->getSize() << std::endl;
+    for (size_t i=0;i<_atoms->getSize();i++) {
+        std::cout << _atoms->get(i)->getRadius() << std::endl;
+    }
+
+    _atoms->findNeighbors(0, 10);
 }
 

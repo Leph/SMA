@@ -3,6 +3,7 @@
 
 #include <Ogre.h>
 #include "InputListener.hpp"
+#include "SimulationListener.hpp"
 #include "AtomManager.hpp"
 
 /**
@@ -56,6 +57,11 @@ private:
     InputListener* _inputListener;
 
     /**
+     * Gestion de la simulation
+     */
+    SimulationListener* _simulationListener;
+
+    /**
      * Conteneur des atomes
      */
     AtomManager* _atoms;
@@ -91,6 +97,11 @@ private:
      * Création et initialisation de la gestion des inputs
      */
     void createFrameListener();
+
+    /**
+     * Initialisation de la simulation et la scene
+     */
+    void initSimulation();
 };
 
 #endif
