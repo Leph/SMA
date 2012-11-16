@@ -56,6 +56,14 @@ class AtomManager
          */
         void shuffle();
 
+        /**
+         * Récupère et renvoi la liste de tous les atomes 
+         * dans un rayon donné autour de l'atome d'index
+         * spécifié. L'atome source est exclut de la liste
+         */
+        std::list<Atom*>& findNeighbors
+            (size_t index, Ogre::Real radius);
+
     private:
 
         /**
@@ -63,6 +71,18 @@ class AtomManager
          * atomes
          */
         std::vector<Atom*> _atoms;
+
+        /**
+         * Requète Ogre pour récupérer tous les
+         * entités d'une régions de l'espace
+         */
+        Ogre::SphereSceneQuery* _query;
+    
+        /**
+         * Liste d'atomes stokant le résultat
+         * des requètes de scenes
+         */
+        std::list<Atom*> _resultQuery;
 };
 
 #endif
