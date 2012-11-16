@@ -93,8 +93,8 @@ void Application::createRenderWindow()
 
 void Application::createScene()
 {
-    _scene = _root->createSceneManager("OctreeSceneManager", "scene_manager");
-    _scene->setAmbientLight(ColourValue(1.0f, 1.0f, 1.0f));
+    //Création et choix du scene manager : Octree
+    _scene = _root->createSceneManager("OctreeSceneManager");
 
     //Défini le scene manager comme global
     Global::setSceneManager(_scene);
@@ -144,22 +144,31 @@ void Application::run()
 
 void Application::initSimulation()
 {
-    Entity* ent = _scene->createEntity("ogrehead", "ogrehead.mesh");
+    _scene->setAmbientLight(ColourValue(0.1, 0.1, 0.1));
+    Ogre::Light *light1 = _scene->createLight();
+    light1->setDiffuseColour(1.0, 0.7, 1.0);
+    light1->setSpecularColour(1.0, 0.7, 1.0);
+    light1->setPosition(-100, 200, 100);
+
+
+    Entity* ent = _scene->createEntity("ogrehead.mesh");
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    Atom* a1 = new Atom(0.5, Vector3(0, 100, 0));
+    Atom* a1 = new Atom(50, Vector3(0, 100, 100));
     _atoms->add(a1);
-    Atom* a2 = new Atom(0.6, Vector3(0, 0, 100));
+    Atom* a2 = new Atom(51, Vector3(0, 0, 100));
     _atoms->add(a2);
-    Atom* a3 = new Atom(0.7, Vector3(100, 0, 0));
-    _atoms->add(a3);
 
-    std::cout << "Size: " << _atoms->getSize() << std::endl;
-    for (size_t i=0;i<_atoms->getSize();i++) {
-        std::cout << _atoms->get(i)->getRadius() << std::endl;
+    //Mise à jour du graphe de scene
+    //==> mise à jour de l'octree
+    _scene->_updateSceneGraph(_camera);
+
+    std::cout << "POUET :" << std::endl;
+    std::list<Atom*> atoms = _atoms->findNeighbors(0, 50);
+    while (!atoms.empty()) {
+        std::cout << atoms.front()->getRadius() << std::endl;
+        atoms.pop_front();
     }
-
-    _atoms->findNeighbors(0, 10);
 }
 
