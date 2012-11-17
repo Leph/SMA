@@ -34,18 +34,12 @@ class Atom
          * Déplace l'atome
          * Intégration des forces directement sur la position
          * Déplacement du node d'Ogre de la scène
+         * Calcul des forces
          * Tests des collisions
          *
          * @param dt : pas de temps
          */
         void move(Ogre::Real dt);
-
-        /**
-         * Réinitialise et calcul les forces
-         * appliquée à l'atome
-         * Donne le vecteur de déplacement
-         */
-        void computeMove();
 
     protected:
 
@@ -55,15 +49,23 @@ class Atom
         Ogre::Real _radius;
 
         /**
-         * Sa position
+         * Sa position actuelle
          */
         Ogre::Vector3 _position;
 
         /**
-         * La somme des forces instantannées qui
-         * lui sont appliqué (ex : gravité, mouvement brownien)
+         * Représente la direction du mouvement brownien
+         * de l'atome. 
+         * Utilisé par la methode applyBrownian
          */
-        Ogre::Vector3 _force;
+        Ogre::Vector3 _brownianMotion;
+
+        /**
+         * Compte le temps avant recalcul du mouvement
+         * brownlien.
+         * Utilisé par la methode applyBrownian
+         */
+        Ogre::Real _brownianCounter;
 
         /**
          * Le noeud Ogre auquel est rataché la représentation
@@ -87,7 +89,7 @@ class Atom
          * Renvoi le mouvement brownien
          * appliqué sur l'atome
          */
-        Ogre::Vector3 applyBrownian();
+        Ogre::Vector3 applyBrownian(Ogre::Real dt);
 };
 
 #endif

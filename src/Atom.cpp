@@ -7,13 +7,24 @@ using Ogre::Real;
 using Ogre::Vector3;
 using Ogre::Entity;
 using Ogre::Any;
+using Ogre::Math;
 
 Atom::Atom(Real radius, Vector3 position) :
     _radius(radius),
     _position(position),
-    _force(Vector3(0, 0, 0)),
+    _brownianMotion(),
+    _brownianCounter(),
     _node(0)
 {
+    //initialisation du mouvement brownien
+    _brownianMotion = Vector3(
+        Math::RangeRandom(-1, 1),
+        Math::RangeRandom(-1, 1),
+        Math::RangeRandom(-1, 1)
+    ).normalise();
+    _brownianCounter = 0;
+
+    //Création de l'apparence graphique de l'atome
     initNode();
 }
 
@@ -36,15 +47,15 @@ const Vector3& Atom::getPosition() const
 void Atom::move(Real dt)
 {
     assert(dt > 0);
-    _position += _force*dt;
-    _node->setPosition(_position);
-}
 
-void Atom::computeMove()
-{
-    _force = Vector3(0, 0, 0);
-    _force += applyGravity();
-    _force += applyBrownian();
+    //Calcul des forces appliquées sur l'atome
+    Vector3 force = Vector3(0, 0, 0);
+    force += applyGravity();
+    force += applyBrownian(dt);
+
+    //Intégration de la position
+    _position += force*dt;
+    _node->setPosition(_position);
 }
 
 void Atom::initNode()
@@ -75,8 +86,18 @@ Vector3 Atom::applyGravity()
     return Vector3(0, 0, -2.0);
 }
 
-Vector3 Atom::applyBrownian()
+Vector3 Atom::applyBrownian(Real dt)
 {
-    return Vector3(0, 0, 0);
+    _brownianCounter -= dt;
+    if (_brownianCounter <= 0) {
+        _brownianMotion += Vector3(
+            Math::RangeRandom(-1.0, 1.0),
+            Math::RangeRandom(-1.0, 1.0),
+            Math::RangeRandom(-1.0, 1.0)
+        );
+        _brownianMotion.normalise();
+        _brownianCounter = Math::RangeRandom(0.0, 10);
+    }
+    return 10*_brownianMotion;
 }
 
