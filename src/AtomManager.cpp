@@ -5,6 +5,7 @@
 #include "AtomManager.hpp"
 #include "Global.hpp"
 
+using Ogre::Vector3;
 using Ogre::Real;
 using Ogre::Sphere;
 using Ogre::SphereSceneQuery;
@@ -93,7 +94,7 @@ std::list<Atom*>& AtomManager::findNeighbors
     assert(index >= 0 && index < _atoms.size());
     assert(_atoms[index] != 0);
 
-    //Définit de la nouvelle requète
+    //Définie la nouvelle requète
     _query->setSphere(
         Sphere(_atoms[index]->getPosition(), radius));
     
@@ -117,5 +118,31 @@ std::list<Atom*>& AtomManager::findNeighbors
     }
 
     return _resultQuery;
+}
+
+bool AtomManager::checkCollisions
+    (Vector3 center, Real radius, const Atom* exclude)
+{
+    //Définie la nouvelle requète
+    _query->setSphere(
+        Sphere(center, radius));
+    
+    //Requète (Octree)
+    SceneQueryResult& result = _query->execute();
+
+    //Récupération et filtrage des résultats
+    while (!result.movables.empty()) {
+        Any any = result.movables.front()
+            ->getUserObjectBindings().getUserAny();
+        if (!any.isEmpty()) {
+            Atom* atom = Ogre::any_cast<Atom*>(any);
+            if (atom != 0 && atom != exclude) {
+                return true;
+            }
+        }
+        result.movables.pop_front();
+    }
+
+    return false;
 }
 

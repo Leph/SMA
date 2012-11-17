@@ -9,6 +9,7 @@ using Ogre::SceneManager;
  */
 SceneManager* Global::_sceneManager = 0;
 AtomManager* Global::_atomManager = 0;
+PositionResolver* Global::_positionResolver = 0;
 
 SceneManager* Global::getSceneManager()
 {
@@ -32,5 +33,18 @@ void Global::setAtomManager(AtomManager* atomManager)
 {
     assert(atomManager != 0);
     Global::_atomManager = atomManager;
+}
+
+PositionResolver* Global::getPositionResolver()
+{
+    assert(Global::_positionResolver != 0);
+    return Global::_positionResolver;
+}
+
+void Global::setPositionResolver
+    (PositionResolver* positionResolver)
+{
+    assert(positionResolver != 0);
+    Global::_positionResolver = positionResolver;
 }
 

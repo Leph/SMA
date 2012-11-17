@@ -5,6 +5,7 @@
 #include "InputListener.hpp"
 #include "SimulationListener.hpp"
 #include "AtomManager.hpp"
+#include "PositionResolver.hpp"
 
 /**
  * Classe principale représentant l'application Ogre
@@ -65,6 +66,11 @@ private:
      * Conteneur des atomes
      */
     AtomManager* _atoms;
+
+    /**
+     * Gère les collisions
+     */
+    PositionResolver* _positionResolver;
 
     /**
      * Initialisation l'application

@@ -64,6 +64,15 @@ class AtomManager
         std::list<Atom*>& findNeighbors
             (size_t index, Ogre::Real radius);
 
+        /**
+         * Renvoi true si un atome se trouve dans
+         * la sphere donnée.
+         * Si exclude est défini, l'atome n'est pas pris
+         * en compte
+         */
+        bool checkCollisions(Ogre::Vector3 center, 
+            Ogre::Real radius, const Atom* exclude = 0);
+
     private:
 
         /**

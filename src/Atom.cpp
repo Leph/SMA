@@ -54,8 +54,14 @@ void Atom::move(Real dt)
     force += applyBrownian(dt);
 
     //Intégration de la position
-    _position += force*dt;
+    Vector3 motion = force*dt;
+    //Vérification des collisions et autres contraintes
+    //spatial
+    _position = Global::getPositionResolver()
+        ->resolve(this, motion);
     _node->setPosition(_position);
+    //Mise à jour des structures Ogre de la scene (octree)
+    Global::getSceneManager()->_updateSceneGraph(0);
 }
 
 void Atom::initNode()

@@ -15,6 +15,7 @@ using Ogre::Real;
 using Ogre::Entity;
 using Ogre::SceneNode;
 using Ogre::WindowEventUtilities;
+using Ogre::Math;
 
 Application::Application() : 
     _root(0),
@@ -23,13 +24,15 @@ Application::Application() :
     _camera(0),
     _inputListener(0),
     _simulationListener(0),
-    _atoms(0)
+    _atoms(0),
+    _positionResolver(0)
 {
     setup();
 }
 
 Application::~Application()
 {
+    delete _positionResolver;
     delete _atoms;
     delete _root;
 }
@@ -52,6 +55,11 @@ void Application::setup()
     //Création et enregistrement global du conteneur d'atome
     _atoms = new AtomManager();
     Global::setAtomManager(_atoms);
+    
+    //Création et enregistrement globlal du gestionnaire
+    //de collisions
+    _positionResolver = new PositionResolver();
+    Global::setPositionResolver(_positionResolver);
 }
 
 void Application::loadResources()
@@ -110,14 +118,15 @@ void Application::createCamera()
 
     Viewport* vp = _window->addViewport(_camera);
     _camera->setAspectRatio(Real(vp->getActualWidth())/Real(vp->getActualHeight()));
+    _camera->setPolygonMode(Ogre::PM_WIREFRAME);
     vp->setBackgroundColour(ColourValue(0,0,0));
 }
 
 void Application::createFrameListener()
 {
     //Gestion des entrées
-    _inputListener = new InputListener(_window, _camera);
-    _root->addFrameListener(_inputListener);
+    //_inputListener = new InputListener(_window, _camera);
+    //_root->addFrameListener(_inputListener);
 
     //Gestion de la simulation
     _simulationListener = new SimulationListener();
@@ -155,20 +164,29 @@ void Application::initSimulation()
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    Atom* a1 = new Atom(50, Vector3(0, 100, 100));
-    _atoms->add(a1);
-    Atom* a2 = new Atom(51, Vector3(0, 0, 100));
-    _atoms->add(a2);
+    for (int i=0;i<100;i++) {
+        Vector3 position = Vector3(
+            Math::RangeRandom(-1000, 1000),
+            Math::RangeRandom(-1000, 1000),
+            Math::RangeRandom(-1000, 1000));
+        Real radius = Math::RangeRandom(50, 100);
+        if (!_atoms->checkCollisions(position, radius+10, 0)) {
+            Atom* a = new Atom(radius, position);
+            _atoms->add(a);
+            
+            //Mise à jour du graphe de scene
+            //==> mise à jour de l'octree
+            _scene->_updateSceneGraph(0);
+        }
+    }
 
-    //Mise à jour du graphe de scene
-    //==> mise à jour de l'octree
-    _scene->_updateSceneGraph(_camera);
-
+    /*
     std::cout << "POUET :" << std::endl;
     std::list<Atom*> atoms = _atoms->findNeighbors(0, 50);
     while (!atoms.empty()) {
         std::cout << atoms.front()->getRadius() << std::endl;
         atoms.pop_front();
     }
+    */
 }
 
