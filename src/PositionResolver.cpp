@@ -26,8 +26,7 @@ Vector3 PositionResolver::resolve
         //Si la position d'arrivée est déjà
         //occupée, on cherche par dichotomie
         //la meilleur position sans collision
-        /*
-        for (int i=0;i<5;i++) {
+        for (int i=0;i<4;i++) {
             Vector3 middle = (start+stop)/2.0;
             if (
                 Global::getAtomManager()
@@ -40,15 +39,10 @@ Vector3 PositionResolver::resolve
                 start = middle;
             }
         }
-        */
-        assert(Global::getAtomManager()
-            ->checkCollisions(start, radius, atom) == false);
         return start;
     } else {
         //Si il n'y a pas de collision à la position
         //d'arrivée, c'est bon
-        assert(Global::getAtomManager()
-            ->checkCollisions(stop, radius, atom) == false);
         return stop;
     }
 }

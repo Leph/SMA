@@ -60,6 +60,7 @@ void Atom::move(Real dt)
     _position = Global::getPositionResolver()
         ->resolve(this, motion);
     _node->setPosition(_position);
+
     //Mise à jour des structures Ogre de la scene (octree)
     Global::getSceneManager()->_updateSceneGraph(0);
 }
@@ -78,7 +79,7 @@ void Atom::initNode()
     _node->setScale(
         Vector3(_radius/50, _radius/50, _radius/50));
     _node->setPosition(_position);
-    _node->showBoundingBox(true);
+    _node->showBoundingBox(false);
 
     //Attache à l'entité un pointeur vers cette instance afin
     //de pouvoir récupérer l'objet Atom à partir du noeud
@@ -89,7 +90,7 @@ void Atom::initNode()
 
 Vector3 Atom::applyGravity()
 {
-    return Vector3(0, 0, -2.0);
+    return Vector3(0, -4.0, 0);
 }
 
 Vector3 Atom::applyBrownian(Real dt)

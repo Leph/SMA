@@ -7,8 +7,8 @@
 
 using Ogre::Vector3;
 using Ogre::Real;
-using Ogre::Sphere;
-using Ogre::SphereSceneQuery;
+using Ogre::AxisAlignedBox;
+using Ogre::AxisAlignedBoxSceneQuery;
 using Ogre::SceneQueryResult;
 using Ogre::Any;
 
@@ -19,8 +19,8 @@ AtomManager::AtomManager() :
 {
     //Création de la requète de scene
     _query = Global::getSceneManager()
-        ->createSphereQuery(
-            Sphere(),
+        ->createAABBQuery(
+            AxisAlignedBox(),
             Ogre::OctreeSceneManager::ENTITY_TYPE_MASK
         );
 }
@@ -74,8 +74,9 @@ void AtomManager::shuffle()
         if (_atoms[i] == 0) {
             _atoms[i] = _atoms[_atoms.size()-1];
             _atoms.pop_back();
+        } else {
+            i++;
         }
-        i++;
     }
 
     //Mélange aléatoirement le conteneur
@@ -95,8 +96,11 @@ std::list<Atom*>& AtomManager::findNeighbors
     assert(_atoms[index] != 0);
 
     //Définie la nouvelle requète
-    _query->setSphere(
-        Sphere(_atoms[index]->getPosition(), radius));
+    _query->setBox(
+        AxisAlignedBox(
+            _atoms[index]->getPosition()-radius, 
+            _atoms[index]->getPosition()+radius
+    ));
     
     //Suppresion des anciens résultats
     _resultQuery.clear();
@@ -124,8 +128,8 @@ bool AtomManager::checkCollisions
     (Vector3 center, Real radius, const Atom* exclude)
 {
     //Définie la nouvelle requète
-    _query->setSphere(
-        Sphere(center, radius));
+    _query->setBox(
+        AxisAlignedBox(center-radius, center+radius));
     
     //Requète (Octree)
     SceneQueryResult& result = _query->execute();
@@ -137,7 +141,13 @@ bool AtomManager::checkCollisions
         if (!any.isEmpty()) {
             Atom* atom = Ogre::any_cast<Atom*>(any);
             if (atom != 0 && atom != exclude) {
-                return true;
+                Real distance = atom->getPosition()
+                    .squaredDistance(center)
+                    - (atom->getRadius()+radius)
+                    *(atom->getRadius()+radius);
+                if (distance <= 0) {
+                    return true;
+                }
             }
         }
         result.movables.pop_front();

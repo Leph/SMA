@@ -85,7 +85,7 @@ class AtomManager
          * Requète Ogre pour récupérer tous les
          * entités d'une régions de l'espace
          */
-        Ogre::SphereSceneQuery* _query;
+        Ogre::AxisAlignedBoxSceneQuery* _query;
     
         /**
          * Liste d'atomes stokant le résultat

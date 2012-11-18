@@ -125,8 +125,8 @@ void Application::createCamera()
 void Application::createFrameListener()
 {
     //Gestion des entrées
-    //_inputListener = new InputListener(_window, _camera);
-    //_root->addFrameListener(_inputListener);
+    _inputListener = new InputListener(_window, _camera);
+    _root->addFrameListener(_inputListener);
 
     //Gestion de la simulation
     _simulationListener = new SimulationListener();
@@ -159,34 +159,22 @@ void Application::initSimulation()
     light1->setSpecularColour(1.0, 0.7, 1.0);
     light1->setPosition(-100, 200, 100);
 
-
     Entity* ent = _scene->createEntity("ogrehead.mesh");
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    for (int i=0;i<100;i++) {
+    for (int i=0;i<500;i++) {
         Vector3 position = Vector3(
             Math::RangeRandom(-1000, 1000),
             Math::RangeRandom(-1000, 1000),
             Math::RangeRandom(-1000, 1000));
         Real radius = Math::RangeRandom(50, 100);
-        if (!_atoms->checkCollisions(position, radius+10, 0)) {
+        if (!_atoms->checkCollisions(position, radius, 0)) {
             Atom* a = new Atom(radius, position);
             _atoms->add(a);
-            
             //Mise à jour du graphe de scene
-            //==> mise à jour de l'octree
             _scene->_updateSceneGraph(0);
         }
     }
-
-    /*
-    std::cout << "POUET :" << std::endl;
-    std::list<Atom*> atoms = _atoms->findNeighbors(0, 50);
-    while (!atoms.empty()) {
-        std::cout << atoms.front()->getRadius() << std::endl;
-        atoms.pop_front();
-    }
-    */
 }
 
