@@ -4,6 +4,7 @@
 #include <Ogre.h>
 #include "AtomManager.hpp"
 #include "PositionResolver.hpp"
+#include "Terrain.hpp"
 
 /**
  * Conteneur static pour les instances globales
@@ -35,6 +36,12 @@ class Global
         static void setPositionResolver
             (PositionResolver* positionResolver);
 
+        /**
+         * Renvoi et définie l'instance globale du terrain
+         */
+        static Terrain* getTerrain();
+        static void setTerrain(Terrain* terrain);
+
     private:
 
         /**
@@ -55,6 +62,12 @@ class Global
          * spaciales
          */
         static PositionResolver* _positionResolver;
+
+        /**
+         * Terrain
+         * Instance globale du terrain
+         */
+        static Terrain* _terrain;
 };
 
 #endif

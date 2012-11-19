@@ -10,6 +10,7 @@ using Ogre::SceneManager;
 SceneManager* Global::_sceneManager = 0;
 AtomManager* Global::_atomManager = 0;
 PositionResolver* Global::_positionResolver = 0;
+Terrain* Global::_terrain = 0;
 
 SceneManager* Global::getSceneManager()
 {
@@ -46,5 +47,17 @@ void Global::setPositionResolver
 {
     assert(positionResolver != 0);
     Global::_positionResolver = positionResolver;
+}
+
+Terrain* Global::getTerrain()
+{
+    assert(Global::_terrain != 0);
+    return Global::_terrain;
+}
+
+void Global::setTerrain(Terrain* terrain)
+{
+    assert(terrain != 0);
+    Global::_terrain = terrain;
 }
 
