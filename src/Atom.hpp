@@ -13,7 +13,7 @@ class Atom
         /**
          * Construit et initialise l'atome
          */
-        Atom(Ogre::Real radius, Ogre::Vector3 position);
+        Atom(Ogre::Real radius, const Ogre::Vector3& position);
 
         /**
          * Supprime le Node des données d'Ogre

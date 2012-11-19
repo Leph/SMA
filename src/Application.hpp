@@ -6,6 +6,7 @@
 #include "SimulationListener.hpp"
 #include "AtomManager.hpp"
 #include "PositionResolver.hpp"
+#include "Terrain.hpp"
 
 /**
  * Classe principale représentant l'application Ogre
@@ -71,6 +72,11 @@ private:
      * Gère les collisions
      */
     PositionResolver* _positionResolver;
+
+    /**
+     * Instance globale du terrain
+     */
+    Terrain* _terrain;
 
     /**
      * Initialisation l'application

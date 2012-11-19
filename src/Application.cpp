@@ -25,7 +25,8 @@ Application::Application() :
     _inputListener(0),
     _simulationListener(0),
     _atoms(0),
-    _positionResolver(0)
+    _positionResolver(0),
+    _terrain(0)
 {
     setup();
 }
@@ -34,6 +35,7 @@ Application::~Application()
 {
     delete _positionResolver;
     delete _atoms;
+    delete _terrain;
     delete _root;
 }
 
@@ -51,6 +53,10 @@ void Application::setup()
     //Chargement des ressources
     TextureManager::getSingleton().setDefaultNumMipmaps(5);
     ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
+    
+    //Création et enregistrement global du terrain
+    _terrain = new Terrain();
+    Global::setTerrain(_terrain);
 
     //Création et enregistrement global du conteneur d'atome
     _atoms = new AtomManager();
@@ -169,10 +175,11 @@ void Application::initSimulation()
             Math::RangeRandom(-1000, 1000),
             Math::RangeRandom(-1000, 1000));
         Real radius = Math::RangeRandom(50, 100);
-        if (!_atoms->checkCollisions(position, radius, 0)) {
+        if (!_positionResolver->checkCollisionAtoms(
+            position, radius)) 
+        {
             Atom* a = new Atom(radius, position);
             _atoms->add(a);
-            //Mise à jour du graphe de scene
             _scene->_updateSceneGraph(0);
         }
     }

@@ -22,7 +22,7 @@ InputListener::InputListener(RenderWindow* window, Camera* camera) :
     _keyboard(0)
 {
     //Paramètre de configuration
-    CAMERA_KEYBOARD_VELOCITY = 200;
+    CAMERA_KEYBOARD_VELOCITY = 1000;
     CAMERA_MOUSE_VELOCITY = 50;
 
     //Initialisation de la gestion des entrées

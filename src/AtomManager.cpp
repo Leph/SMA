@@ -1,28 +1,15 @@
 #include <cstdlib>
 #include <assert.h>
-#include <Plugins/OctreeSceneManager/OgreOctreeSceneManager.h>
 
 #include "AtomManager.hpp"
 #include "Global.hpp"
 
 using Ogre::Vector3;
 using Ogre::Real;
-using Ogre::AxisAlignedBox;
-using Ogre::AxisAlignedBoxSceneQuery;
-using Ogre::SceneQueryResult;
-using Ogre::Any;
 
 AtomManager::AtomManager() :
-    _atoms(),
-    _query(0),
-    _resultQuery()
+    _atoms()
 {
-    //Création de la requète de scene
-    _query = Global::getSceneManager()
-        ->createAABBQuery(
-            AxisAlignedBox(),
-            Ogre::OctreeSceneManager::ENTITY_TYPE_MASK
-        );
 }
 
 AtomManager::~AtomManager()
@@ -34,8 +21,6 @@ AtomManager::~AtomManager()
             _atoms[i] = 0;
         }
     }
-    //Destruction de la requète de scene
-    Global::getSceneManager()->destroyQuery(_query);
 }
 
 size_t AtomManager::getSize() const
@@ -87,72 +72,5 @@ void AtomManager::shuffle()
         _atoms[index] = _atoms[i];
         _atoms[i] = tmp;
     }
-}
-
-std::list<Atom*>& AtomManager::findNeighbors
-    (size_t index, Real radius)
-{
-    assert(index >= 0 && index < _atoms.size());
-    assert(_atoms[index] != 0);
-
-    //Définie la nouvelle requète
-    _query->setBox(
-        AxisAlignedBox(
-            _atoms[index]->getPosition()-radius, 
-            _atoms[index]->getPosition()+radius
-    ));
-    
-    //Suppresion des anciens résultats
-    _resultQuery.clear();
-
-    //Requète (Octree)
-    SceneQueryResult& result = _query->execute();
-
-    //Récupération et filtrage des résultats
-    while (!result.movables.empty()) {
-        Any any = result.movables.front()
-            ->getUserObjectBindings().getUserAny();
-        if (!any.isEmpty()) {
-            Atom* atom = Ogre::any_cast<Atom*>(any);
-            if (atom != 0 && atom != _atoms[index]) {
-                _resultQuery.push_front(atom);
-            }
-        }
-        result.movables.pop_front();
-    }
-
-    return _resultQuery;
-}
-
-bool AtomManager::checkCollisions
-    (Vector3 center, Real radius, const Atom* exclude)
-{
-    //Définie la nouvelle requète
-    _query->setBox(
-        AxisAlignedBox(center-radius, center+radius));
-    
-    //Requète (Octree)
-    SceneQueryResult& result = _query->execute();
-
-    //Récupération et filtrage des résultats
-    while (!result.movables.empty()) {
-        Any any = result.movables.front()
-            ->getUserObjectBindings().getUserAny();
-        if (!any.isEmpty()) {
-            Atom* atom = Ogre::any_cast<Atom*>(any);
-            if (atom != 0 && atom != exclude) {
-                Real distance = atom->getPosition()
-                    .squaredDistance(center)
-                    - (atom->getRadius()+radius)
-                    *(atom->getRadius()+radius);
-                if (distance <= 0) {
-                    return true;
-                }
-            }
-        }
-        result.movables.pop_front();
-    }
-
-    return false;
 }
 

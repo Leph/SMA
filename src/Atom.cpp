@@ -9,7 +9,7 @@ using Ogre::Entity;
 using Ogre::Any;
 using Ogre::Math;
 
-Atom::Atom(Real radius, Vector3 position) :
+Atom::Atom(Real radius, const Vector3& position) :
     _radius(radius),
     _position(position),
     _brownianMotion(),
