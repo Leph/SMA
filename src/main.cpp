@@ -19,12 +19,7 @@
 
     //Créer et lance l'application
     Application app;
-    try {
-        app.run();
-    } catch(Ogre::Exception& e) {
-        std::cerr << "An exception has occured: " <<
-            e.getFullDescription().c_str() << std::endl;
-    }
+    app.run();
 
     return 0;
 }

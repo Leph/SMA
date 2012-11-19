@@ -66,7 +66,6 @@ std::list<Atom*>& PositionResolver::findAtoms(
     return _resultQuery;
 }
 
-
 bool PositionResolver::checkCollisionAtoms
     (const Vector3& center, Real radius, const Atom* exclude)
 {
@@ -112,7 +111,9 @@ bool PositionResolver::positionConstrained
     assert(atom != 0);
     Real radius = atom->getRadius();
     
-    return !(checkCollisionAtoms(position, radius, atom) ||
-        Global::getTerrain()->checkCollision(position, radius));
+    return 
+        !checkCollisionAtoms(position, radius, atom) &&
+        !Global::getTerrain()->checkCollision(position, radius) &&
+        atom->checkConstraintBonds(position);
 }
 

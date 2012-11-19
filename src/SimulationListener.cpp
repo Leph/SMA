@@ -9,7 +9,7 @@ bool SimulationListener::frameRenderingQueued(const FrameEvent& event)
     size_t size = Global::getAtomManager()->getSize();
     size_t i;
     for (i=0;i<size;i++) {
-        Global::getAtomManager()->get(i)->move(5.0);
+        Global::getAtomManager()->get(i)->move(1.0);
     }
 
     return true;

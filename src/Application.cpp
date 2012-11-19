@@ -124,7 +124,7 @@ void Application::createCamera()
 
     Viewport* vp = _window->addViewport(_camera);
     _camera->setAspectRatio(Real(vp->getActualWidth())/Real(vp->getActualHeight()));
-    _camera->setPolygonMode(Ogre::PM_WIREFRAME);
+    //_camera->setPolygonMode(Ogre::PM_WIREFRAME);
     vp->setBackgroundColour(ColourValue(0,0,0));
 }
 
@@ -169,11 +169,11 @@ void Application::initSimulation()
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    for (int i=0;i<500;i++) {
+    for (int i=0;i<200;i++) {
         Vector3 position = Vector3(
-            Math::RangeRandom(-1000, 1000),
-            Math::RangeRandom(-1000, 1000),
-            Math::RangeRandom(-1000, 1000));
+            Math::RangeRandom(-1500, 1500),
+            Math::RangeRandom(-1500, 1500),
+            Math::RangeRandom(-1500, 1500));
         Real radius = Math::RangeRandom(50, 100);
         if (!_positionResolver->checkCollisionAtoms(
             position, radius)) 
@@ -183,5 +183,26 @@ void Application::initSimulation()
             _scene->_updateSceneGraph(0);
         }
     }
+
+    _atoms->createBond(
+        _atoms->get(0),
+        _atoms->get(1),
+        100
+    );
+    _atoms->createBond(
+        _atoms->get(1),
+        _atoms->get(2),
+        100
+    );
+    _atoms->createBond(
+        _atoms->get(2),
+        _atoms->get(3),
+        100
+    );
+    _atoms->createBond(
+        _atoms->get(3),
+        _atoms->get(0),
+        100
+    );
 }
 

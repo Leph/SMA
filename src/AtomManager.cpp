@@ -3,6 +3,7 @@
 
 #include "AtomManager.hpp"
 #include "Global.hpp"
+#include "Bond.hpp"
 
 using Ogre::Vector3;
 using Ogre::Real;
@@ -72,5 +73,17 @@ void AtomManager::shuffle()
         _atoms[index] = _atoms[i];
         _atoms[i] = tmp;
     }
+}
+
+void AtomManager::createBond
+    (Atom* a1, Atom* a2, Real length)
+{
+    assert(a1 != 0 && a2 != 0);
+    assert(length > 0);
+
+    //Donne aux deux atomes la liaison
+    Bond* bond = new Bond(a1, a2, length);
+    a1->addBond(bond);
+    a2->addBond(bond);
 }
 

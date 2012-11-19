@@ -14,7 +14,8 @@ Atom::Atom(Real radius, const Vector3& position) :
     _position(position),
     _brownianMotion(),
     _brownianCounter(),
-    _node(0)
+    _node(0),
+    _bonds()
 {
     //initialisation du mouvement brownien
     _brownianMotion = Vector3(
@@ -30,8 +31,14 @@ Atom::Atom(Real radius, const Vector3& position) :
 
 Atom::~Atom()
 {
+    //Détruit le noeud de scene
     _node->removeAllChildren();
     Global::getSceneManager()->destroySceneNode(_node);
+
+    //Détruit les liaisons associées
+    while (!_bonds.empty()) {
+        _bonds[0]->remove();
+    }
 }
 
 Real Atom::getRadius() const
@@ -61,8 +68,44 @@ void Atom::move(Real dt)
         ->resolve(this, motion);
     _node->setPosition(_position);
 
+    //Mise à jour des liaisons de l'atome
+    for (size_t i=0;i<_bonds.size();i++) {
+        _bonds[i]->updateNode();
+    }
+
     //Mise à jour des structures Ogre de la scene (octree)
     Global::getSceneManager()->_updateSceneGraph(0);
+}
+        
+void Atom::addBond(Bond* bond)
+{
+    assert(bond != 0);
+    _bonds.push_back(bond);
+}
+        
+void Atom::delBond(Bond* bond)
+{
+    assert(bond != 0);
+    size_t i=0;
+    while (i < _bonds.size() && _bonds[i] != bond) {
+        i++;
+    }
+    assert(i < _bonds.size());
+
+    _bonds[i] = _bonds[_bonds.size()-1];
+    _bonds.pop_back();
+}
+        
+bool Atom::checkConstraintBonds
+    (const Vector3& position) const
+{
+    for (size_t i=0;i<_bonds.size();i++) {
+        if (!_bonds[i]->checkConstraint(this, position)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void Atom::initNode()

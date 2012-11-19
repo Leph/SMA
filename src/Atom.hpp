@@ -1,7 +1,9 @@
 #ifndef ATOM_HPP
 #define ATOM_HPP
 
+#include <vector>
 #include <Ogre.h>
+#include "Bond.hpp"
 
 /**
  * Classe de base pour toutes les particules
@@ -41,6 +43,29 @@ class Atom
          */
         void move(Ogre::Real dt);
 
+        /**
+         * Ajoute une liaison au conteneur
+         * de liaison
+         */
+        void addBond(Bond* bond);
+
+        /**
+         * Supprime une liaison du
+         * conteneur
+         * Ne désalloue pas la liaison
+         * (Cette méthode est appelée par
+         * Bond)
+         */
+        void delBond(Bond* bond);
+
+        /**
+         * Renvoi true si le déplacement
+         * est compatible avec les liaisons
+         * de l'atome
+         */
+        bool checkConstraintBonds
+            (const Ogre::Vector3& position) const;
+
     protected:
 
         /**
@@ -72,6 +97,12 @@ class Atom
          * graphique de l'atome
          */
         Ogre::SceneNode* _node;
+
+        /**
+         * Conteneur pour les liaisons
+         * de l'atome
+         */
+        std::vector<Bond*> _bonds;
 
         /**
          * Créer et initialise le Node Ogre pour

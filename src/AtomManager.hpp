@@ -56,6 +56,13 @@ class AtomManager
          */
         void shuffle();
 
+        /**
+         * Créer une nouvelle liaison entre les
+         * deux atomes donnée
+         */
+        void createBond
+            (Atom* a1, Atom* a2, Ogre::Real length);
+
     private:
 
         /**
