@@ -108,6 +108,19 @@ bool Atom::checkConstraintBonds
     return true;
 }
 
+bool Atom::isBoundTo(Atom* atom)
+{
+    assert(atom != 0);
+
+    for(size_t i=0;i<_bonds.size();i++) {
+        if (_bonds[i]->getOtherEnd(this) == atom) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Atom::initNode()
 {
     //Creer une sphere de rayon _radius pour la 

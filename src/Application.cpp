@@ -1,6 +1,7 @@
 #include "Application.hpp"
 #include "Global.hpp"
 #include "Atom.hpp"
+#include "Graph.hpp"
 
 using Ogre::Root;
 using Ogre::String;
@@ -204,5 +205,8 @@ void Application::initSimulation()
         _atoms->get(0),
         100
     );
+
+    Graph* g = new Graph();
+    g->build(_atoms->get(10));
 }
 

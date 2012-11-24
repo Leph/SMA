@@ -6,7 +6,7 @@
 #include "Atom.hpp"
 
 /**
- * Représente un graphe local
+ * Représente un graphe local (non orienté)
  * utilisé lors des transformations
  * (réécriture d'étoile)
  */
@@ -20,19 +20,20 @@ class Graph
         Graph();
 
         /**
-         * Ajoute le sommet spécifié
-         * Renvoi son index dans le conteneur interne
+         * Déssaloue le graph
          */
-        size_t addVertex(Atom* atom);
+        ~Graph();
 
         /**
-         * Ajoute un lien entre les deux sommets spécifiés
-         * par leur indice interne
+         * Reconstruit le graphe local
+         * centré sur l'atome spécifié
+         * Le graphe précédent est détruit
          */
-        void addEdge(size_t index1, size_t index2);
+        void build(Atom* atom);
 
         /**
          * Vide les structures de données du graph
+         * Stoppe la représentation graphique
          */
         void clear();
 
@@ -55,24 +56,44 @@ class Graph
         std::vector< std::vector<size_t> > _edges;
 
         /**
-         * Distance de seuil utilisé pour la construction
+         * Le noeud Ogre auquel est ratachée la représentation
+         * graphique du graph
+         */
+        Ogre::SceneNode* _node;
+
+        /**
+         * Distance de voisinage utilisée pour la
+         * construction de graphes locaux
+         * Le graphe local inclura tous les atomes
+         * dans la sphère définie
+         */
+        static const Ogre::Real DISTANCE_NEIGHBOURHOOD = 500;
+
+        /**
+         * Distance de seuil utilisée pour la construction
          * des graphes locaux
          * Si la distance entre deux atomes est inférieure
          * à cette distance, une arrête ets créée
          */
-        static const Ogre::Real DISTANCE_THRESHOLD = 50;
+        static const Ogre::Real DISTANCE_EDGE = 1000;
 
         /**
-         * Le noeud Ogre auquel est ratachée la représentation
-         * graphique du graph
+         * Ajoute le sommet spécifié
+         * Renvoi son index dans le conteneur interne
          */
-        //Ogre::SceneNode* _node;
+        size_t addVertex(Atom* atom);
+
+        /**
+         * Ajoute un lien entre les deux sommets spécifiés
+         * par leur indice interne
+         */
+        void addEdge(size_t index1, size_t index2);
 
         /**
          * Créer et initialise le Node Ogre pour
          * la représentation graphique
          */
-        //void initNode();
+        void initNode();
 };
 
 #endif

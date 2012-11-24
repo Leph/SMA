@@ -66,6 +66,12 @@ class Atom
         bool checkConstraintBonds
             (const Ogre::Vector3& position) const;
 
+        /**
+         * renvoi true si cet atome est
+         * lié à un autre atome donné
+         */
+        bool isBoundTo(Atom* atom);
+
     protected:
 
         /**
