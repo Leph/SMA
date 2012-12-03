@@ -29,9 +29,6 @@ Atom::Atom(Real radius, const Vector3& position) :
         Math::RangeRandom(-1, 1)
     ).normalise();
     _brownianCounter = 0;
-
-    //Création de l'apparence graphique de l'atome
-    initNode();
 }
 
 Atom::~Atom()
@@ -178,6 +175,6 @@ Vector3 Atom::applyBrownian(Real dt)
         _brownianMotion.normalise();
         _brownianCounter = Math::RangeRandom(0.0, 10);
     }
-    return 10*_brownianMotion;
+    return 20*_brownianMotion;
 }
 

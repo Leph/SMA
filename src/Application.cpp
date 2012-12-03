@@ -1,6 +1,10 @@
 #include "Application.hpp"
 #include "Global.hpp"
 #include "Atom.hpp"
+#include "Atom_Lambda.hpp"
+#include "Atom_Apply.hpp"
+#include "Atom_Association.hpp"
+#include "Atom_Term.hpp"
 #include "Graph.hpp"
 
 using Ogre::Root;
@@ -162,48 +166,54 @@ void Application::initSimulation()
 {
     _scene->setAmbientLight(ColourValue(0.1, 0.1, 0.1));
     Ogre::Light *light1 = _scene->createLight();
-    light1->setDiffuseColour(1.0, 0.7, 1.0);
-    light1->setSpecularColour(1.0, 0.7, 1.0);
+    light1->setDiffuseColour(1.0, 1.0, 1.0);
+    light1->setSpecularColour(1.0, 1.0, 1.0);
     light1->setPosition(-100, 200, 100);
 
     Entity* ent = _scene->createEntity("ogrehead.mesh");
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    for (int i=0;i<200;i++) {
+    for (int i=0;i<150;i++) {
         Vector3 position = Vector3(
             Math::RangeRandom(-1500, 1500),
             Math::RangeRandom(-1500, 1500),
             Math::RangeRandom(-1500, 1500));
-        Real radius = Math::RangeRandom(50, 100);
+        Atom* a;
+        Real r = Math::RangeRandom(0,100);
+        if (r>=90) a = new Atom_Lambda(position);
+        else if (r>=70) a = new Atom_Apply(position);
+        else if (r>=50) a = new Atom_Association(position);
+        else if (r>=0) a = new Atom_Term(position);
         if (!_positionResolver->checkCollisionAtoms(
-            position, radius)) 
+            a->getPosition(), a->getRadius())) 
         {
-            Atom* a = new Atom(radius, position);
             _atoms->add(a);
             _scene->_updateSceneGraph(0);
+        } else {
+            delete a;
         }
     }
 
     _atoms->createBond(
         _atoms->get(0),
         _atoms->get(1),
-        100
+        150
     );
     _atoms->createBond(
         _atoms->get(1),
         _atoms->get(2),
-        100
+        150
     );
     _atoms->createBond(
         _atoms->get(2),
         _atoms->get(3),
-        100
+        150
     );
     _atoms->createBond(
         _atoms->get(3),
         _atoms->get(0),
-        100
+        150
     );
 
     Graph* g = new Graph();
