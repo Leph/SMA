@@ -1,6 +1,7 @@
 #include "Bond.hpp"
 #include "Atom.hpp"
 #include "Global.hpp"
+#include "Geometry.hpp"
 
 using Ogre::Real;
 using Ogre::Vector3;
@@ -90,26 +91,7 @@ void Bond::remove()
 
 void Bond::initNode()
 {
-    ManualObject* manual = Global::getSceneManager()
-        ->createManualObject();
-    manual->begin(
-        "BaseWhiteNoLighting", 
-        Ogre::RenderOperation::OT_TRIANGLE_LIST
-    );
-    for (int i=0;i<=10;i++) {
-        Real c1 = Math::Cos(i*3.14*2.0/10);
-        Real s1 = Math::Sin(i*3.14*2.0/10);
-        Real c2 = Math::Cos((i+1)*3.14*2.0/10);
-        Real s2 = Math::Sin((i+1)*3.14*2.0/10);
-        manual->position(-1, c1, s1);
-        manual->position( 1, c1, s1);
-        manual->position( 1, c2, s2);
-        manual->position( 1, c2, s2);
-        manual->position(-1, c2, s2);
-        manual->position(-1, c1, s1);
-    }
-    manual->end();
-
+    ManualObject* manual = Geometry::cylinder(10);
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
     _node->attachObject(manual);

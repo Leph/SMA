@@ -1,4 +1,5 @@
 #include "Terrain.hpp"
+#include "Geometry.hpp"
 #include "Global.hpp"
 
 using Ogre::Real;
@@ -31,76 +32,7 @@ bool Terrain::checkCollision
 
 void Terrain::initNode()
 {
-    ManualObject* manual = Global::getSceneManager()
-        ->createManualObject();
-
-    manual->begin(
-        "BaseWhiteNoLighting", 
-        Ogre::RenderOperation::OT_LINE_LIST
-    );
-    for (long i=0;i<=_subdivision;i++) {
-        manual->position(-1,  1,  i*1/_subdivision);
-        manual->position(-1, -1,  i*1/_subdivision);
-        manual->position(-1,  1, -i*1/_subdivision);
-        manual->position(-1, -1, -i*1/_subdivision);
-        
-        manual->position( 1,  1,  i*1/_subdivision);
-        manual->position( 1, -1,  i*1/_subdivision);
-        manual->position( 1,  1, -i*1/_subdivision);
-        manual->position( 1, -1, -i*1/_subdivision);
-        
-        manual->position( 1, -1,  i*1/_subdivision);
-        manual->position(-1, -1,  i*1/_subdivision);
-        manual->position( 1, -1, -i*1/_subdivision);
-        manual->position(-1, -1, -i*1/_subdivision);
-        
-        manual->position( 1,  1,  i*1/_subdivision);
-        manual->position(-1,  1,  i*1/_subdivision);
-        manual->position( 1,  1, -i*1/_subdivision);
-        manual->position(-1,  1, -i*1/_subdivision);
-
-        manual->position(-i*1/_subdivision,  1, -1);
-        manual->position(-i*1/_subdivision, -1, -1);
-        manual->position( i*1/_subdivision,  1, -1);
-        manual->position( i*1/_subdivision, -1, -1);
-        
-        manual->position(-i*1/_subdivision,  1,  1);
-        manual->position(-i*1/_subdivision, -1,  1);
-        manual->position( i*1/_subdivision,  1,  1);
-        manual->position( i*1/_subdivision, -1,  1);
-
-        manual->position(-i*1/_subdivision,  1,  1);
-        manual->position(-i*1/_subdivision,  1, -1);
-        manual->position( i*1/_subdivision,  1,  1);
-        manual->position( i*1/_subdivision,  1, -1);
-
-        manual->position(-i*1/_subdivision, -1,  1);
-        manual->position(-i*1/_subdivision, -1, -1);
-        manual->position( i*1/_subdivision, -1,  1);
-        manual->position( i*1/_subdivision, -1, -1);
-
-        manual->position( 1, -i*1/_subdivision, -1);
-        manual->position(-1, -i*1/_subdivision, -1);
-        manual->position( 1,  i*1/_subdivision, -1);
-        manual->position(-1,  i*1/_subdivision, -1);
-
-        manual->position( 1, -i*1/_subdivision,  1);
-        manual->position(-1, -i*1/_subdivision,  1);
-        manual->position( 1,  i*1/_subdivision,  1);
-        manual->position(-1,  i*1/_subdivision,  1);
-
-        manual->position( 1, -i*1/_subdivision,  1);
-        manual->position( 1, -i*1/_subdivision, -1);
-        manual->position( 1,  i*1/_subdivision,  1);
-        manual->position( 1,  i*1/_subdivision, -1);
-
-        manual->position(-1, -i*1/_subdivision,  1);
-        manual->position(-1, -i*1/_subdivision, -1);
-        manual->position(-1,  i*1/_subdivision,  1);
-        manual->position(-1,  i*1/_subdivision, -1);
-    }
-    manual->end();
-
+    ManualObject* manual = Geometry::terrain(_subdivision);
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
     _node->attachObject(manual);

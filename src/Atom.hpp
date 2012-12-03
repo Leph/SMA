@@ -6,7 +6,9 @@
 #include "Bond.hpp"
 
 /**
+ * Atom
  * Classe de base pour toutes les particules
+ * classe Abstraite
  */
 class Atom
 {
@@ -20,7 +22,7 @@ class Atom
         /**
          * Supprime le Node des données d'Ogre
          */
-        ~Atom();
+        virtual ~Atom();
 
         /**
          * Renvoi le rayon
@@ -113,8 +115,12 @@ class Atom
         /**
          * Créer et initialise le Node Ogre pour
          * la représentation graphique
+         * Spécifie la couleur et la forme
+         * de la représentation
          */
-        void initNode();
+        void initNode(
+            Ogre::ManualObject* manual, 
+            const Ogre::ColourValue& colour);
 
         /**
          * Renvoi la force de gravitation

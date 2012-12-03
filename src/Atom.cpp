@@ -1,13 +1,18 @@
+#include <sstream>
 #include <assert.h>
 
 #include "Atom.hpp"
 #include "Global.hpp"
+#include "Geometry.hpp"
 
 using Ogre::Real;
 using Ogre::Vector3;
 using Ogre::Entity;
+using Ogre::ManualObject;
 using Ogre::Any;
 using Ogre::Math;
+using Ogre::String;
+using Ogre::ColourValue;
 
 Atom::Atom(Real radius, const Vector3& position) :
     _radius(radius),
@@ -121,27 +126,39 @@ bool Atom::isBoundTo(Atom* atom)
     return false;
 }
 
-void Atom::initNode()
+void Atom::initNode
+    (ManualObject* manual, const ColourValue& colour)
 {
-    //Creer une sphere de rayon _radius pour la 
-    //représentation graphique de l'atome
-    //La sphère par default de Ogre à un rayon
-    //de 50 unités
-    Entity* sphere = Global::getSceneManager()
-        ->createEntity(Ogre::SceneManager::PT_SPHERE);
+    /**
+     * Création du noeud de scene Ogre
+     * et mise à jour de sa position et taille
+     */
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
-    _node->attachObject(sphere);
+    _node->attachObject(manual);
     _node->setScale(
-        Vector3(_radius/50, _radius/50, _radius/50));
+        Vector3(_radius, _radius, _radius));
     _node->setPosition(_position);
     _node->showBoundingBox(false);
 
     //Attache à l'entité un pointeur vers cette instance afin
     //de pouvoir récupérer l'objet Atom à partir du noeud
     //de scene
-    sphere->getUserObjectBindings().setUserAny(
+    manual->getUserObjectBindings().setUserAny(
         Any(this));
+
+    //Conversion de la couleur en nom de 
+    //materiel
+    std::ostringstream oss;
+    oss << colour.getAsRGBA();
+    String materialName = oss.str();
+
+    //Création d'un nouveau matériel à partir du matériel
+    //de base et mise à jour de la couleur
+    Ogre::MaterialPtr material = manual->getSection(0)
+        ->getMaterial().getPointer()->clone(materialName);
+    material.getPointer()->setDiffuse(colour);
+    manual->getSection(0)->setMaterialName(materialName);
 }
 
 Vector3 Atom::applyGravity()
