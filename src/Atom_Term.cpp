@@ -26,3 +26,9 @@ int Atom_Term::getValue() const
     return _value;
 }
 
+bool Atom_Term::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Term>();
+}
+

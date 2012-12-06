@@ -14,3 +14,10 @@ Atom_Apply_Virt::Atom_Apply_Virt(Vector3& position) :
     );
 }
 
+bool Atom_Apply_Virt::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Apply>() ||
+        atom->isType<Atom_Apply_Virt>();
+}
+

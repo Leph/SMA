@@ -35,6 +35,12 @@ class Atom
         const Ogre::Vector3& getPosition() const;
 
         /**
+         * Renvoi true si l'atome représente 
+         * l'atome spécifié
+         */
+        virtual bool isRepresent(const Atom* atom) const = 0;
+
+        /**
          * Déplace l'atome
          * Intégration des forces directement sur la position
          * Déplacement du node d'Ogre de la scène
@@ -73,6 +79,14 @@ class Atom
          * lié à un autre atome donné
          */
         bool isBoundTo(Atom* atom);
+
+        /**
+         * Renvoi true si l'atome est de class T
+         */
+        template <class T>
+        bool isType() const {
+            return dynamic_cast<T*>(const_cast<Atom*>(this)) != 0;
+        }
 
     protected:
 

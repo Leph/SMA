@@ -22,6 +22,8 @@ class Atom_Term : public Atom
          */
         int getValue() const;
 
+        virtual bool isRepresent(const Atom* atom) const;
+
     private:
 
         /**

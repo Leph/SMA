@@ -14,3 +14,9 @@ Atom_Apply::Atom_Apply(Vector3& position) :
     );
 }
 
+bool Atom_Apply::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Apply>();
+}
+

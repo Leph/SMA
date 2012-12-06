@@ -13,6 +13,8 @@ class Atom_Association : public Atom
     public:
 
         Atom_Association(Ogre::Vector3& position);
+        
+        virtual bool isRepresent(const Atom* atom) const;
 };
 
 #endif

@@ -14,3 +14,10 @@ Atom_Lambda_Virt::Atom_Lambda_Virt(Vector3& position) :
     );
 }
 
+bool Atom_Lambda_Virt::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Lambda>() ||
+        atom->isType<Atom_Lambda_Virt>();
+}
+

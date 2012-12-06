@@ -15,3 +15,10 @@ Atom_Association_Virt::Atom_Association_Virt
     );
 }
 
+bool Atom_Association_Virt::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Association>() ||
+        atom->isType<Atom_Association_Virt>();
+}
+

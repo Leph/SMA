@@ -14,3 +14,9 @@ Atom_Lambda::Atom_Lambda(Vector3& position) :
     );
 }
 
+bool Atom_Lambda::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Lambda>();
+}
+

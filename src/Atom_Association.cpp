@@ -14,3 +14,9 @@ Atom_Association::Atom_Association(Vector3& position) :
     );
 }
 
+bool Atom_Association::isRepresent(const Atom* atom) const
+{
+    return 
+        atom->isType<Atom_Association>();
+}
+

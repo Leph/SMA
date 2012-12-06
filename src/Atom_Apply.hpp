@@ -13,6 +13,8 @@ class Atom_Apply : public Atom
     public:
 
         Atom_Apply(Ogre::Vector3& position);
+
+        virtual bool isRepresent(const Atom* atom) const;
 };
 
 #endif
