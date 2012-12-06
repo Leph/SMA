@@ -1,4 +1,4 @@
-#include "Atom_Lambda.hpp"
+#include "Atoms.hpp"
 #include "Geometry.hpp"
 
 using Ogre::Vector3;

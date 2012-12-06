@@ -2,7 +2,7 @@
 #define ATOM_APPLY_VIRT_HPP
 
 #include <Ogre.h>
-#include "Atom.hpp"
+#include "Atoms.hpp"
 
 /**
  * Atom_Apply_Virt

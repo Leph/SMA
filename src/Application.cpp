@@ -1,14 +1,6 @@
 #include "Application.hpp"
+#include "Atoms.hpp"
 #include "Global.hpp"
-#include "Atom.hpp"
-#include "Atom_Lambda.hpp"
-#include "Atom_Lambda_Virt.hpp"
-#include "Atom_Apply.hpp"
-#include "Atom_Apply_Virt.hpp"
-#include "Atom_Association.hpp"
-#include "Atom_Association_Virt.hpp"
-#include "Atom_Term.hpp"
-#include "Atom_Term_Virt.hpp"
 #include "Graph.hpp"
 
 using Ogre::Root;

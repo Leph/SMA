@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include "Atom_Term_Virt.hpp"
+#include "Atoms.hpp"
 #include "Geometry.hpp"
 
 using Ogre::Vector3;

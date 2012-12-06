@@ -2,7 +2,7 @@
 #define ATOM_TERM_VIRT_HPP
 
 #include <Ogre.h>
-#include "Atom_Term.hpp"
+#include "Atoms.hpp"
 
 /**
  * Atom_Term_Virt

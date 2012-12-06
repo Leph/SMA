@@ -2,7 +2,7 @@
 #define ATOM_TERM_HPP
 
 #include <Ogre.h>
-#include "Atom.hpp"
+#include "Atoms.hpp"
 
 /**
  * Atom_Term

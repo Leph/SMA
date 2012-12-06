@@ -2,7 +2,7 @@
 #define ATOM_ASSOCIATION_HPP
 
 #include <Ogre.h>
-#include "Atom.hpp"
+#include "Atoms.hpp"
 
 /**
  * Atom_Association
