@@ -126,6 +126,13 @@ bool Atom::isBoundTo(Atom* atom)
 void Atom::initNode
     (ManualObject* manual, const ColourValue& colour)
 {
+    //Détruit le noeud de scene si
+    //déjà définie
+    if (_node != 0) {
+        _node->removeAllChildren();
+        Global::getSceneManager()->destroySceneNode(_node);
+    }
+
     /**
      * Création du noeud de scene Ogre
      * et mise à jour de sa position et taille

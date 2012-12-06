@@ -2,9 +2,13 @@
 #include "Global.hpp"
 #include "Atom.hpp"
 #include "Atom_Lambda.hpp"
+#include "Atom_Lambda_Virt.hpp"
 #include "Atom_Apply.hpp"
+#include "Atom_Apply_Virt.hpp"
 #include "Atom_Association.hpp"
+#include "Atom_Association_Virt.hpp"
 #include "Atom_Term.hpp"
+#include "Atom_Term_Virt.hpp"
 #include "Graph.hpp"
 
 using Ogre::Root;
@@ -182,9 +186,19 @@ void Application::initSimulation()
         Atom* a;
         Real r = Math::RangeRandom(0,100);
         if (r>=90) a = new Atom_Lambda(position);
+        else if (r>=80) a = new Atom_Lambda_Virt(position);
         else if (r>=70) a = new Atom_Apply(position);
+        else if (r>=60) a = new Atom_Apply_Virt(position);
         else if (r>=50) a = new Atom_Association(position);
-        else if (r>=0) a = new Atom_Term(position);
+        else if (r>=40) a = new Atom_Association_Virt(position);
+        else if (r>=20) a = new Atom_Term(
+            position, 
+            (int)Math::RangeRandom(0.0, 2.0)
+        );
+        else if (r>=0) a = new Atom_Term_Virt(
+            position, 
+            (int)Math::RangeRandom(0.0, 2.0)
+        );
         if (!_positionResolver->checkCollisionAtoms(
             a->getPosition(), a->getRadius())) 
         {

@@ -12,7 +12,22 @@ class Atom_Term : public Atom
 {
     public:
 
-        Atom_Term(Ogre::Vector3& position);
+        /**
+         * Construit l'atome terme avec sa valeur
+         */
+        Atom_Term(Ogre::Vector3& position, int value);
+
+        /**
+         * Renvoi la valeur du terme
+         */
+        int getValue() const;
+
+    private:
+
+        /**
+         * La valeur du terme
+         */
+        int _value;
 };
 
 #endif
