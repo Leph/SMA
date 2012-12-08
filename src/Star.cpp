@@ -8,10 +8,11 @@ Star::Star(size_t center,
     _exclude1(exclude1),
     _exclude2(exclude2)
 {
-    assert(_center >= 0 || 
+    assert(_center >= -1 || 
         _exclude1 >= -1 || _exclude2 >= -1);
+    assert(!(_center == -1 && _exclude1 != -1));
     assert(!(_exclude1 == -1 && _exclude2 != -1));
-    assert(_center != _exclude1);
+    assert(_center == -1 || _center != _exclude1);
     assert(_exclude1 == -1 || _exclude1 != _exclude2);
 }
 

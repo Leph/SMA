@@ -16,7 +16,7 @@ class Star
         /**
          * Initialise l'étoile
          */
-        Star(size_t center, 
+        Star(size_t center = -1, 
             size_t exclude1 = -1, size_t exclude2 = -1);
 
         /**
