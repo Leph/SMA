@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <Ogre.h>
-#include "Atom.hpp"
+#include "Atoms.hpp"
 
 /**
  * Représente un graphe local (non orienté)
@@ -36,6 +36,30 @@ class Graph
          * Stoppe la représentation graphique
          */
         void clear();
+
+        /**
+         * Renvoi le nombre de sommets
+         * du graphe
+         */
+        size_t sizeVertex() const;
+
+        /**
+         * Renvoi l'atome correspondant au sommet 
+         * index
+         */
+        Atom* getVertex(size_t index) const;
+
+        /**
+         * Renvoi le nombre de voisin du sommet
+         * index
+         */
+        size_t sizeEdge(size_t index) const;
+
+        /**
+         * Renvoi l'indice du i-ème voisin du 
+         * sommet index
+         */
+        size_t getEdge(size_t index, size_t i) const;
 
     private:
 

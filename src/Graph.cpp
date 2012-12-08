@@ -77,6 +77,33 @@ void Graph::clear()
     _vertices.clear();
     _edges.clear();
 }
+        
+size_t Graph::sizeVertex() const
+{
+    return _vertices.size();
+}
+        
+Atom* Graph::getVertex(size_t index) const
+{
+    assert(index >=0 && index < _vertices.size());
+
+    return _vertices[index];
+}
+        
+size_t Graph::sizeEdge(size_t index) const
+{
+    assert(index >=0 && index < _edges.size());
+
+    return _edges[index].size();
+}
+        
+size_t Graph::getEdge(size_t index, size_t i) const
+{
+    assert(index >=0 && index < _edges.size());
+    assert(i >=0 && i < _edges[index].size());
+
+    return _edges[index][i];
+}
 
 size_t Graph::addVertex(Atom* atom)
 {
