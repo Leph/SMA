@@ -14,9 +14,6 @@
     int main(int argc, char *argv[])
 #endif
 {
-    //Initialisation le générateur aléatoire
-    srand(0);
-
     //Créer et lance l'application
     Application app;
     app.run();

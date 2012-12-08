@@ -2,6 +2,7 @@
 #include "Atoms.hpp"
 #include "Global.hpp"
 #include "Graph.hpp"
+#include "TransformLambda.hpp"
 
 using Ogre::Root;
 using Ogre::String;
@@ -160,6 +161,14 @@ void Application::run()
 
 void Application::initSimulation()
 {
+    //Initialisation le générateur aléatoire
+    //(debug)
+    //int seed = (int)Math::RangeRandom(20, 10000000);
+    //std::cout << "===>" << (int)seed << std::endl;
+    //int seed = 6486951;//7264745 8983653;
+    int seed = 8983653;
+    srand(seed);
+
     _scene->setAmbientLight(ColourValue(0.1, 0.1, 0.1));
     Ogre::Light *light1 = _scene->createLight();
     light1->setDiffuseColour(1.0, 1.0, 1.0);
@@ -222,7 +231,16 @@ void Application::initSimulation()
         150
     );
 
-    Graph* g = new Graph();
-    g->build(_atoms->get(10));
+    Graph* g = 0;
+    for (size_t i=0;i<_atoms->getSize();i++) {
+        if (_atoms->get(i)->isType<Atom_Lambda>()) {
+            g = new Graph();
+            g->build(_atoms->get(i));
+            break;
+        }
+    }
+    TransformLambda t = TransformLambda(*g);
+    std::cout << t.isValid() << std::endl;
+    while(t.doTransformStep());
 }
 
