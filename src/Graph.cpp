@@ -8,7 +8,9 @@ using Ogre::ManualObject;
 
 Graph::Graph() :
     _vertices(),
+    _states(),
     _edges(),
+    _bfs(),
     _node(0)
 {
 }
@@ -62,6 +64,9 @@ void Graph::build(Atom* atom)
 
     //Créer la représentation graphique
     initNode();
+
+    //Initialise la parcours
+    initBFS();
 }
 
 void Graph::clear()
@@ -75,6 +80,7 @@ void Graph::clear()
 
     //Supprime les données
     _vertices.clear();
+    _states.clear();
     _edges.clear();
 }
         
@@ -105,6 +111,49 @@ size_t Graph::getEdge(size_t index, size_t i) const
     return _edges[index][i];
 }
 
+void Graph::initBFS()
+{
+    assert(_vertices.size() == _states.size());
+    for (size_t i=0;i<_states.size();i++) {
+        _states[i] = false;
+    }
+    _bfs.clear();
+}
+        
+void Graph::setState(size_t index, bool value)
+{
+    assert(index >= 0 && index < _states.size());
+    _states[index] = value;
+}
+
+void Graph::addVertexToBFS(size_t index)
+{
+    assert(index >= 0 && index < _vertices.size());
+    assert(_states[index] == false);
+    _bfs.push_back(index);
+    _states[index] = true;
+}
+        
+size_t Graph::nextVertexBFS()
+{
+    if (_bfs.empty()) {
+        return -1;
+    }
+
+    size_t index = _bfs.front();
+    _bfs.pop_front();
+
+    for (size_t i=0;i<_edges[index].size();i++) {
+        size_t j = _edges[index][i];
+        if (_states[j] == false) {
+            _states[j] = true;
+            _bfs.push_back(j);
+        }
+    }
+
+    return index;
+}
+
 size_t Graph::addVertex(Atom* atom)
 {
     assert(atom != 0);
@@ -115,6 +164,7 @@ size_t Graph::addVertex(Atom* atom)
     }
     
     _vertices.push_back(atom);
+    _states.push_back(false);
     _edges.push_back(std::vector<size_t>());
 
     return _vertices.size()-1;

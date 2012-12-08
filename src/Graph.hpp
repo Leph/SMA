@@ -61,6 +61,31 @@ class Graph
          */
         size_t getEdge(size_t index, size_t i) const;
 
+        /**
+         * Initialise le parcours en largeur
+         * (réinitialise les états des sommets)
+         */
+        void initBFS();
+
+        /**
+         * Définie l'état d'un sommet pour le parcours
+         * en largeur
+         */
+        void setState(size_t index, bool value);
+
+        /**
+         * Rajoute l'indice donné à la file du parcours
+         * en largeur
+         * L'état du sommet ne doit pas être activé
+         */
+        void addVertexToBFS(size_t index);
+
+        /**
+         * Renvoi le prochain indice à parcourir
+         * Renvoi -1 si le parcours est terminé
+         */
+        size_t nextVertexBFS();
+
     private:
 
         /**
@@ -72,12 +97,28 @@ class Graph
         std::vector<Atom*> _vertices;
 
         /**
+         * Contient l'état des sommets. _states[i]
+         * correspond au ième sommet (_vertices[i])
+         * Utilisé pour la parcours en largeur
+         * Vaut true si le noeud à été inséré dans
+         * la file de parcours
+         */
+        std::vector<bool> _states;
+
+        /**
          * Les arrêtes du graphe. _edges[i] 
          * correspond au ième sommet (_vertices[i])
          * Chaque ligne contient la liste des sommmets
          * successeurs
          */
         std::vector< std::vector<size_t> > _edges;
+
+        /**
+         * Liste d'indice de sommet pour
+         * le parcours en largeur du graphe
+         * (Breadth-First Search)
+         */
+        std::list<size_t> _bfs;
 
         /**
          * Le noeud Ogre auquel est ratachée la représentation
