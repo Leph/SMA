@@ -35,6 +35,13 @@ class Atom
         const Ogre::Vector3& getPosition() const;
 
         /**
+         * Définie manuellement la position de l'atome
+         * Le respect des contraintes de position n'est
+         * pas vérifié !
+         */
+        void setPosition(const Ogre::Vector3& position);
+
+        /**
          * Renvoi true si l'atome représente 
          * l'atome spécifié
          */

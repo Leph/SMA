@@ -54,6 +54,15 @@ const Vector3& Atom::getPosition() const
     return _position;
 }
 
+void Atom::setPosition(const Ogre::Vector3& position)
+{
+    _position = position;
+    _node->setPosition(_position);
+    
+    //Mise à jour des structures Ogre de la scene (octree)
+    Global::getSceneManager()->_updateSceneGraph(0);
+}
+
 void Atom::move(Real dt)
 {
     assert(dt > 0);
