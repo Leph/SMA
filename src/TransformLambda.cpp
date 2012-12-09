@@ -86,11 +86,15 @@ TransformLambda::TransformLambda(Graph& graph) :
     std::cout << "End transform construct" << std::endl;
 
     //Initialise le parcours du graphe
-    initTraversing();
+    if (_isValid) {
+        initTraversing();
+    }
 }
 
 bool TransformLambda::doTransformStep()
 {
+    assert(_isValid);
+
     size_t index = _graph.nextVertexBFS();
     std::cout << "BFS " << index << std::endl;
     if (index == -1) {
@@ -99,10 +103,8 @@ bool TransformLambda::doTransformStep()
 
     for (size_t i=0;i<_src.size();i++) {
         if (matchStar(_src[i], Star(index))) {
-            std::cout << "Equal !" << std::endl;
-        } else {
-            std::cout << "Not Equal :(" << std::endl;
-        }
+            std::cout << "Equal !!!!" << std::endl;
+        } 
     }
 
     return true;

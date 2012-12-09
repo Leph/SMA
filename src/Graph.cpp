@@ -120,6 +120,13 @@ void Graph::initBFS()
     _bfs.clear();
 }
         
+bool Graph::getState(size_t index) const
+{
+    assert(index >= 0 && index < _states.size());
+
+    return _states[index];
+}
+
 void Graph::setState(size_t index, bool value)
 {
     assert(index >= 0 && index < _states.size());

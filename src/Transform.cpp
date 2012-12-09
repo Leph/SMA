@@ -19,6 +19,7 @@ bool Transform::isValid() const
 
 void Transform::initTraversing()
 {
+    assert(_isValid);
     //Initialise la parcours en largeur
     _graph.initBFS();
     for (size_t i=0;i<_apply.size();i++) {
@@ -27,11 +28,13 @@ void Transform::initTraversing()
         _graph.setState(center, true);
         //Ajoute comme sommet à parcourir les voisins de 
         //l'atome d'application différent des atomes excluts
+        //(non encore ajoutés)
         for (size_t j=0;j<_graph.sizeEdge(center);j++) {
             size_t index = _graph.getEdge(center, j);
             if (
                 _apply[i].exclude1() != index &&
-                _apply[i].exclude2() != index
+                _apply[i].exclude2() != index &&
+                _graph.getState(index) == false
             ) {
                 _graph.addVertexToBFS(index);
             }
@@ -42,7 +45,7 @@ void Transform::initTraversing()
 bool Transform::matchStar
     (const Star& src, const Star& dst) const
 {
-    std::cout << "==== latch Star===" << std::endl;
+    std::cout << "====Match Star===" << std::endl;
     size_t srcIndex = src.center();
     size_t dstIndex = dst.center();
     Atom* srcCenter = _graph.getVertex(srcIndex);
@@ -210,7 +213,6 @@ bool Transform::matchStar
         //Si on est sortie de la boucle avec le flag
         //match = true, un résultat est trouvé
         if (matched) {
-            //On sort, ok
             break;
         }
         //Sinon, on continue à explorer

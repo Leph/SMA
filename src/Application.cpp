@@ -242,6 +242,8 @@ void Application::initSimulation()
     }
     TransformLambda t = TransformLambda(*g);
     std::cout << t.isValid() << std::endl;
-    while(t.doTransformStep());
+    if (t.isValid()) {
+        while(t.doTransformStep());
+    }
 }
 

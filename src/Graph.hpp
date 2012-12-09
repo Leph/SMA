@@ -68,6 +68,11 @@ class Graph
         void initBFS();
 
         /**
+         * Renvoi l'état d'un sommet pour le parcours
+         */
+        bool getState(size_t index) const;
+
+        /**
          * Définie l'état d'un sommet pour le parcours
          * en largeur
          */
