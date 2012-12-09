@@ -12,9 +12,11 @@ class Atom_Lambda : public Atom
 {
     public:
 
-        Atom_Lambda(Ogre::Vector3& position);
+        Atom_Lambda(const Ogre::Vector3& position);
 
         virtual bool isRepresent(const Atom* atom) const;
+        
+        virtual Atom* create() const;
 };
 
 #endif

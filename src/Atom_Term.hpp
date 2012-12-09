@@ -15,7 +15,7 @@ class Atom_Term : public Atom
         /**
          * Construit l'atome terme avec sa valeur
          */
-        Atom_Term(Ogre::Vector3& position, int value);
+        Atom_Term(const Ogre::Vector3& position, int value);
 
         /**
          * Renvoi la valeur du terme
@@ -23,6 +23,8 @@ class Atom_Term : public Atom
         int getValue() const;
 
         virtual bool isRepresent(const Atom* atom) const;
+        
+        virtual Atom* create() const;
 
     private:
 

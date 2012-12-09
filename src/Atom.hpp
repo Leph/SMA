@@ -99,6 +99,13 @@ class Atom
         }
 
         /**
+         * Alloue un nouvel atom du même type
+         * avec les mêmes radius et position
+         * Les autres attributs sont réinitialisés
+         */
+        virtual Atom* create() const = 0;
+
+        /**
          * Renvoi l'index de l'atome dans le tableau 
          * de l'AtomManager
          */

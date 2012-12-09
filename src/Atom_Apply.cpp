@@ -4,7 +4,7 @@
 using Ogre::Vector3;
 using Ogre::ColourValue;
 
-Atom_Apply::Atom_Apply(Vector3& position) : 
+Atom_Apply::Atom_Apply(const Vector3& position) : 
     Atom::Atom(200, position)
 {
     //Création de l'apparence graphique de l'atome
@@ -18,5 +18,10 @@ bool Atom_Apply::isRepresent(const Atom* atom) const
 {
     return 
         atom->isType<Atom_Apply>();
+}
+
+Atom* Atom_Apply::create() const
+{
+    return new Atom_Apply(_position);
 }
 

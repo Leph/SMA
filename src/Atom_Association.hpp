@@ -12,9 +12,11 @@ class Atom_Association : public Atom
 {
     public:
 
-        Atom_Association(Ogre::Vector3& position);
+        Atom_Association(const Ogre::Vector3& position);
         
         virtual bool isRepresent(const Atom* atom) const;
+        
+        virtual Atom* create() const;
 };
 
 #endif

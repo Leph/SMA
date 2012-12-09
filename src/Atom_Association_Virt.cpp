@@ -5,7 +5,7 @@ using Ogre::Vector3;
 using Ogre::ColourValue;
 
 Atom_Association_Virt::Atom_Association_Virt
-    (Vector3& position) : 
+    (const Vector3& position) : 
     Atom::Atom(50, position)
 {
     //Création de l'apparence graphique de l'atome
@@ -20,5 +20,10 @@ bool Atom_Association_Virt::isRepresent(const Atom* atom) const
     return 
         atom->isType<Atom_Association>() ||
         atom->isType<Atom_Association_Virt>();
+}
+
+Atom* Atom_Association_Virt::create() const
+{
+    return new Atom_Association_Virt(_position);
 }
 

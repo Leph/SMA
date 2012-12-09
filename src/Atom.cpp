@@ -148,7 +148,7 @@ void Atom::transfertBonds(Atom* atom)
     }
     _bonds.clear();
 }
-        
+
 size_t Atom::getIndex() const
 {
     assert(_index != -1);

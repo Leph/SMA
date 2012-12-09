@@ -7,7 +7,7 @@ using Ogre::Vector3;
 using Ogre::Real;
 using Ogre::ColourValue;
 
-Atom_Term_Virt::Atom_Term_Virt(Vector3& position, int value) : 
+Atom_Term_Virt::Atom_Term_Virt(const Vector3& position, int value) : 
     Atom::Atom(75, position),
     _value(value)
 {
@@ -31,5 +31,10 @@ bool Atom_Term_Virt::isRepresent(const Atom* atom) const
     return 
         atom->isType<Atom_Term>() ||
         atom->isType<Atom_Term_Virt>();
+}
+
+Atom* Atom_Term_Virt::create() const
+{
+    return new Atom_Term_Virt(_position, _value);
 }
 
