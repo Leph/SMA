@@ -2,6 +2,10 @@
 #include <assert.h>
 
 #include "Transform.hpp"
+#include "Global.hpp"
+
+using Ogre::Real;
+using Ogre::Vector3;
 
 Transform::Transform(Graph& graph) :
     _isValid(false),
@@ -42,9 +46,10 @@ void Transform::initTraversing()
     }
 }
 
-bool Transform::matchStar
-    (const Star& src, const Star& dst) const
+bool Transform::matchStar(const Star& src, const Star& dst, 
+    std::vector<size_t>& matches) const
 {
+    assert(matches.empty());
     std::cout << "====Match Star===" << std::endl;
     size_t srcIndex = src.center();
     size_t dstIndex = dst.center();
@@ -53,6 +58,7 @@ bool Transform::matchStar
 
     //Test en premier si le centre de l'étoile correspond
     if (srcCenter->isRepresent(dstCenter) == false) {
+        std::cout << "No same center" << std::endl;
         return false;
     }
 
@@ -97,6 +103,7 @@ bool Transform::matchStar
     //nombreux que les voisins de src (sinon, peut pas
     //être injectif)
     if (srcEdges.size() > dstEdges.size()) {
+        std::cout << "Not injective" << std::endl;
         return false;
     } 
 
@@ -124,6 +131,7 @@ bool Transform::matchStar
         //ont au moins un atome voisin de dst
         //qui lui correspond
         if (links[links.size()-1].size() == 0) {
+            std::cout << "No represent" << std::endl;
             return false;
         }
     }
@@ -143,12 +151,9 @@ bool Transform::matchStar
 
     //Initialise associations avec les premières
     //valeurs possibles dans links pour tous les atomes
-    //valeur : ...0000-1 pour que la première valeur après 
-    //incrémentation soit ...0000
     for (size_t i=0;i<links.size();i++) {
         associations.push_back(0);
     }
-    associations[0] = -1;
     assert(associations.size() == srcEdges.size());
 
     //Initialise les états de used à non
@@ -159,18 +164,39 @@ bool Transform::matchStar
     assert(used.size() == dstEdges.size());
 
     while(true) {
+        std::cout << ">>> loop " << std::endl;
         //Reset les valeurs de used
         for (size_t i=0;i<used.size();i++) {
             used[i] = false;
+        }
+        //Test si la configuration est valide
+        bool matched = true;
+        for (size_t i=0;i<associations.size();i++) {
+            //On regarde si un voisins de dst est utilisé 
+            //deux fois
+            if (used[links[i][associations[i]]] == true) {
+                //La configuration est invalide, on sort de la
+                //boucle
+                matched = false;
+                break;
+            } else {
+                //La configuration est valide pour le moment
+                used[links[i][associations[i]]] = true;
+            }
+        }
+        //Si la configuration est valide, on sort de la boucle
+        //d'exploration
+        //Sinon on incrémente
+        if (matched) {
+            std::cout << "Valid !" << std::endl;
+            break;
         }
         //Incrémente de "un" le vecteur
         //des associations (itération sur
         //toutes les valeurs possibles)
         size_t digit = 0;
-        bool matched = true;
         while (true) {
-            std::cout << ">>> loop " << digit << " (" << links[digit].size() << ") " << matched << std::endl;
-            bool carry = false;
+            std::cout << "   loop digit " << digit << "(" << links[digit].size() << ")" << std::endl;
             //On incrémente le digit
             associations[digit]++;
             //Si on dépasse les valeurs possible
@@ -178,27 +204,12 @@ bool Transform::matchStar
             //prochain digit
             if (associations[digit] == links[digit].size()) {
                 associations[digit] = 0;
-                carry = true;
                 std::cout << "carry true" << std::endl;
             }
-            //Sinon, on sort de la boucle
+            //Sinon, on sort de la boucle, le vecteur est
+            //incrémenté
             else {
-                carry = false;
                 std::cout << "carry false" << std::endl;
-            }
-            //On test que la valeur n'est pas déjà prise
-            if (used[links[digit][associations[digit]]] == true) {
-                //Si c'est le cas, la configuration n'est pas valide
-                matched = false;
-                std::cout << "unvalid" << std::endl;
-            } else {
-                //Mise à jour des atomes voisins de dst utilisé
-                used[links[digit][associations[digit]]] = true;
-                std::cout << "valid" << std::endl;
-            }
-            //On sort de la boucle si il n'y a pas de retenu,
-            //le vecteur est incrémenté
-            if (!carry) {
                 break;
             }
             digit++;
@@ -210,14 +221,48 @@ bool Transform::matchStar
                 return false;
             }
         }
-        //Si on est sortie de la boucle avec le flag
-        //match = true, un résultat est trouvé
-        if (matched) {
-            break;
-        }
-        //Sinon, on continue à explorer
-        //toutes les valeurs
     }
+
+    //Les voisins de dst correspondants sont insérés dans 
+    //matches
+    for (size_t i=0;i<used.size();i++) {
+        if (used[i]) {
+            matches.push_back(dstEdges[i]);
+        }
+    }
+    assert(matches.size() == srcEdges.size());
+
+    return true;
+}
+
+bool Transform::replaceAtom(size_t src, size_t dst) const
+{
+    //Si les atomes sont les mêmes, on ne fait rien
+    if (src == dst) {
+        return true;
+    }
+
+    Atom* dstOldAtom = _graph.getVertex(dst);
+    const Vector3& position = dstOldAtom->getPosition();
+    Real radius = _graph.getVertex(src)->getRadius();
+
+    //Test si il y a la place de remplacer l'atome
+    //dst par un atome src peut être plus gros
+    if (
+        Global::getPositionResolver()
+            ->checkCollisionAtoms
+            (position, radius, dstOldAtom) ||
+        Global::getTerrain()
+            ->checkCollision(position, radius)
+    ) {
+        return false;
+    }
+
+    //Place le nouvel atome et supprime l'ancien
+    Atom* dstNewAtom = _graph.getVertex(src)->create();
+    Global::getAtomManager()->remove(dstOldAtom->getIndex());
+    Global::getAtomManager()->add(dstNewAtom);
+    dstNewAtom->setPosition(position);
 
     return true;
 }

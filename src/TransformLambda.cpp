@@ -1,3 +1,4 @@
+#include <vector>
 #include <assert.h>
 
 #include "TransformLambda.hpp"
@@ -101,9 +102,18 @@ bool TransformLambda::doTransformStep()
         return false;
     }
 
+    std::vector<size_t> matches;
     for (size_t i=0;i<_src.size();i++) {
-        if (matchStar(_src[i], Star(index))) {
+        matches.clear();
+        if (matchStar(_src[i], Star(index), matches)) {
             std::cout << "Equal !!!!" << std::endl;
+            for (size_t j=0;j<matches.size();j++) {
+                std::cout << matches[j] << " ";
+            }
+            std::cout << std::endl;
+            //Remplace le centre de l'étoile ayant matché
+            //avec le centre de l'étoile dst
+            replaceAtom(_dst[i].center(), index);
         } 
     }
 

@@ -82,10 +82,21 @@ class Transform
 
         /**
          * Renvoi true si l'étoile src représente 
-         * l'étoile dst
+         * l'étoile dst, false sinon
+         * Si il y a correspondance, les indices
+         * (dans le graph) des atomes voisins de dst 
+         * ayant correspondus sont insérés dans matches
          */
-        bool matchStar
-            (const Star& src, const Star& dst) const;
+        bool matchStar(const Star& src, const Star& dst, 
+            std::vector<size_t>& matches) const;
+
+        /**
+         * Remplace l'atome dst par l'atome src
+         * Les atomes sont spécifié par leur indice 
+         * dans le graph
+         * Renvoi true si l'opération réussie
+         */
+        bool replaceAtom(size_t src, size_t dst) const;
 };
 
 #endif

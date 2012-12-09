@@ -163,11 +163,14 @@ void Application::initSimulation()
 {
     //Initialisation le générateur aléatoire
     //(debug)
-    //int seed = (int)Math::RangeRandom(20, 10000000);
-    //std::cout << "===>" << (int)seed << std::endl;
-    int seed = 6486951;//7264745 8983653;
+    /*
+    int seed = (int)Math::RangeRandom(20, 10000000);
+    std::cout << "===>" << (int)seed << std::endl;
+    */
+    //int seed = 6486951;//7264745 8983653;
     //int seed = 7264745;
-    //int seed = 8983653;
+    int seed = 8983653;
+    //int seed = 9765800;
     srand(seed);
 
     _scene->setAmbientLight(ColourValue(0.1, 0.1, 0.1));
@@ -231,6 +234,8 @@ void Application::initSimulation()
         _atoms->get(0),
         150
     );
+    _atoms->get(0)->transfertBonds(_atoms->get(1));
+    _atoms->get(1)->transfertBonds(_atoms->get(2));
 
     Graph* g = 0;
     for (size_t i=0;i<_atoms->getSize();i++) {
