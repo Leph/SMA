@@ -53,7 +53,10 @@ class Atom
 
         /**
          * Ajoute une liaison au conteneur
-         * de liaison
+         * de liaison. La liaison doit avoir
+         * été définie.
+         * Il ne peut pas y avoir deux liaisons
+         * vers le même atome
          */
         void addBond(Bond* bond);
 
@@ -79,6 +82,13 @@ class Atom
          * lié à un autre atome donné
          */
         bool isBoundTo(Atom* atom);
+
+        /**
+         * Transfert les liaisons de cet atome
+         * vers l'atome spécifé.
+         * Après, cet atome n'a plus de liasons
+         */
+        void transfertBonds(Atom* atom);
 
         /**
          * Renvoi true si l'atome est de class T

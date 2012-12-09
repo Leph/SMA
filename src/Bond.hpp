@@ -32,6 +32,12 @@ class Bond
         Atom* getOtherEnd(const Atom* atom) const;
 
         /**
+         * Le bout de la liaison correspondand à src
+         * est remplacé par dst
+         */
+        void transfertEnd(Atom* src, Atom* dst);
+
+        /**
          * Met à jour la représentation graphique
          */
         void updateNode();

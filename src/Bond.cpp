@@ -36,6 +36,18 @@ Atom* Bond::getOtherEnd(const Atom* atom) const
     assert(atom != 0);
     return (_end1 == atom) ? _end2 : _end1;
 }
+        
+void Bond::transfertEnd(Atom* src, Atom* dst)
+{
+    assert(src != 0);
+    assert(dst != 0);
+    if (_end1 == src) {
+        _end1 = dst;
+    } else {
+        _end2 = dst;
+    }
+    updateNode();
+}
 
 void Bond::updateNode()
 {

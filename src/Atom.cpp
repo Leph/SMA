@@ -83,6 +83,8 @@ void Atom::move(Real dt)
 void Atom::addBond(Bond* bond)
 {
     assert(bond != 0);
+    assert(!isBoundTo(bond->getOtherEnd(this)));
+
     _bonds.push_back(bond);
 }
         
@@ -122,6 +124,29 @@ bool Atom::isBoundTo(Atom* atom)
     }
 
     return false;
+}
+        
+void Atom::transfertBonds(Atom* atom)
+{
+    assert(atom != 0);
+    for (size_t i=0;i<_bonds.size();i++) {
+        //Vérifie que l'on est mas lié à l'atome
+        if (_bonds[i]->getOtherEnd(this) == atom) {
+            atom->delBond(_bonds[i]);
+            delete _bonds[i];
+        } 
+        //Vérifie que la liaison n'existe pas déjà
+        else if (atom->isBoundTo(
+            _bonds[i]->getOtherEnd(this))
+        ) {
+            _bonds[i]->getOtherEnd(this)->delBond(_bonds[i]);
+            delete _bonds[i];
+        }else {
+            _bonds[i]->transfertEnd(this, atom);
+            atom->addBond(_bonds[i]);
+        }
+    }
+    _bonds.clear();
 }
         
 size_t Atom::getIndex() const
