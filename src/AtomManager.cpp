@@ -54,6 +54,17 @@ void AtomManager::remove(size_t index)
     delete _atoms[index];
     _atoms[index] = 0;
 }
+        
+void AtomManager::replace(size_t index, Atom* atom)
+{
+    assert(index >= 0 && index < _atoms.size());
+    assert(_atoms[index] != 0);
+    assert(_atoms[index]->getIndex() == index);
+
+    delete _atoms[index];
+    atom->setIndex(index);
+    _atoms[index] = atom;
+}
 
 void AtomManager::shuffle()
 {

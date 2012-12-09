@@ -49,6 +49,13 @@ class AtomManager
         void remove(size_t index);
 
         /**
+         * Remplace l'atome contenue à l'indice index
+         * par atom
+         * (équivalent à remove + add à l'indice index)
+         */
+        void replace(size_t index, Atom* atom);
+
+        /**
          * Mélange les atomes avec 
          * une permutation aléatoire
          * Nettoi le conteneur des atomes supprimés

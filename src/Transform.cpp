@@ -260,8 +260,9 @@ bool Transform::replaceAtom(size_t src, size_t dst) const
 
     //Place le nouvel atome et supprime l'ancien
     Atom* dstNewAtom = _graph.getVertex(src)->create();
-    Global::getAtomManager()->remove(dstOldAtom->getIndex());
-    Global::getAtomManager()->add(dstNewAtom);
+    dstOldAtom->transfertBonds(dstNewAtom);
+    Global::getAtomManager()
+        ->replace(dstOldAtom->getIndex(), dstNewAtom);
     dstNewAtom->setPosition(position);
 
     return true;
