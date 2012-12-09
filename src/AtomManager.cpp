@@ -33,6 +33,7 @@ Atom* AtomManager::get(size_t index) const
 {
     assert(index >= 0 && index < _atoms.size());
     assert(_atoms[index] != 0);
+    assert(_atoms[index]->getIndex() == index);
 
     return _atoms[index];
 }
@@ -40,6 +41,7 @@ Atom* AtomManager::get(size_t index) const
 void AtomManager::add(Atom* atom)
 {
     assert(atom != 0);
+    atom->setIndex(_atoms.size());
     _atoms.push_back(atom);
 }
 
@@ -47,6 +49,7 @@ void AtomManager::remove(size_t index)
 {
     assert(index >= 0 && index < _atoms.size());
     assert(_atoms[index] != 0);
+    assert(_atoms[index]->getIndex() == index);
 
     delete _atoms[index];
     _atoms[index] = 0;
@@ -72,6 +75,7 @@ void AtomManager::shuffle()
         tmp = _atoms[index];
         _atoms[index] = _atoms[i];
         _atoms[i] = tmp;
+        _atoms[i]->setIndex(i);
     }
 }
 

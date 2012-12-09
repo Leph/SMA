@@ -88,6 +88,18 @@ class Atom
             return dynamic_cast<T*>(const_cast<Atom*>(this)) != 0;
         }
 
+        /**
+         * Renvoi l'index de l'atome dans le tableau 
+         * de l'AtomManager
+         */
+        size_t getIndex() const;
+
+        /**
+         * Défini l'index de l'atome
+         * Appelé uniquement par AtomManager
+         */
+        void setIndex(size_t index);
+
     protected:
 
         /**
@@ -125,6 +137,12 @@ class Atom
          * de l'atome
          */
         std::vector<Bond*> _bonds;
+
+        /**
+         * Indice de l'atome dans le conteneur
+         * de l'AtomManager
+         */
+        size_t _index;
 
         /**
          * Créer et initialise le Node Ogre pour

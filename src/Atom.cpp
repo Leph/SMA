@@ -20,7 +20,8 @@ Atom::Atom(Real radius, const Vector3& position) :
     _brownianMotion(),
     _brownianCounter(),
     _node(0),
-    _bonds()
+    _bonds(),
+    _index(-1)
 {
     //initialisation du mouvement brownien
     _brownianMotion = Vector3(
@@ -121,6 +122,18 @@ bool Atom::isBoundTo(Atom* atom)
     }
 
     return false;
+}
+        
+size_t Atom::getIndex() const
+{
+    assert(_index != -1);
+
+    return _index;
+}
+        
+void Atom::setIndex(size_t index)
+{
+    _index = index;
 }
 
 void Atom::initNode
