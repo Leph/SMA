@@ -100,6 +100,8 @@ bool TransformLambda::doTransformStep()
     for (size_t i=0;i<_src.size();i++) {
         if (matchStar(_src[i], Star(index))) {
             std::cout << "Equal !" << std::endl;
+        } else {
+            std::cout << "Not Equal :(" << std::endl;
         }
     }
 

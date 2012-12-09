@@ -143,7 +143,7 @@ void Application::createFrameListener()
 
 void Application::run()
 {
-    //Initialisation de la scene etde la simulation
+    //Initialisation de la scene et de la simulation
     initSimulation();
 
     //Boucle de rendu
@@ -165,8 +165,9 @@ void Application::initSimulation()
     //(debug)
     //int seed = (int)Math::RangeRandom(20, 10000000);
     //std::cout << "===>" << (int)seed << std::endl;
-    //int seed = 6486951;//7264745 8983653;
-    int seed = 8983653;
+    int seed = 6486951;//7264745 8983653;
+    //int seed = 7264745;
+    //int seed = 8983653;
     srand(seed);
 
     _scene->setAmbientLight(ColourValue(0.1, 0.1, 0.1));
