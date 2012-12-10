@@ -119,8 +119,8 @@ void Application::createScene()
 void Application::createCamera()
 {
     _camera = _scene->createCamera("camera");
-    _camera->setPosition(Vector3(0,0,100));
-    _camera->lookAt(Vector3(0,0,0));
+    _camera->setPosition(Vector3(1000,1000,1000));
+    _camera->lookAt(Vector3(0,-1000,0));
     _camera->setNearClipDistance(1);
     _camera->setFarClipDistance(10000);
 
@@ -163,13 +163,11 @@ void Application::initSimulation()
 {
     //Initialisation le générateur aléatoire
     //(debug)
-    /*
     int seed = (int)Math::RangeRandom(20, 10000000);
     std::cout << "===>" << (int)seed << std::endl;
-    */
     //int seed = 6486951;//7264745 8983653;
     //int seed = 7264745;
-    int seed = 8983653;
+    //int seed = 8983653;
     //int seed = 9765800;
     srand(seed);
 
@@ -183,7 +181,7 @@ void Application::initSimulation()
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    for (int i=0;i<150;i++) {
+    for (int i=0;i<500;i++) {
         Vector3 position = Vector3(
             Math::RangeRandom(-1500, 1500),
             Math::RangeRandom(-1500, 1500),
@@ -213,7 +211,7 @@ void Application::initSimulation()
             delete a;
         }
     }
-
+    /*
     _atoms->createBond(
         _atoms->get(0),
         _atoms->get(1),
@@ -250,5 +248,6 @@ void Application::initSimulation()
     if (t.isValid()) {
         while(t.doTransformStep());
     }
+    */
 }
 

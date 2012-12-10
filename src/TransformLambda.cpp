@@ -106,7 +106,24 @@ bool TransformLambda::doTransformStep()
     for (size_t i=0;i<_src.size();i++) {
         matches.clear();
         if (matchStar(_src[i], Star(index), matches)) {
-            std::cout << "Equal !!!!" << std::endl;
+            std::cout << "Equal !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
+            std::cout << "      !!!!!!!!!!!!!!!!!" << std::endl;
             for (size_t j=0;j<matches.size();j++) {
                 std::cout << matches[j] << " ";
             }

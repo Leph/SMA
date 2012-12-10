@@ -196,7 +196,7 @@ bool Transform::matchStar(const Star& src, const Star& dst,
         //toutes les valeurs possibles)
         size_t digit = 0;
         while (true) {
-            std::cout << "   loop digit " << digit << "(" << links[digit].size() << ")" << std::endl;
+            std::cout << "   loop digit " << digit << "(" << links[digit].size() << ") " << associations[digit] << " " << associations.size() << std::endl;
             //On incrémente le digit
             associations[digit]++;
             //Si on dépasse les valeurs possible

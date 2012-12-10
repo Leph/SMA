@@ -73,6 +73,7 @@ void AtomManager::shuffle()
     while (i < _atoms.size()) {
         if (_atoms[i] == 0) {
             _atoms[i] = _atoms[_atoms.size()-1];
+            _atoms[i]->setIndex(i);
             _atoms.pop_back();
         } else {
             i++;
@@ -85,6 +86,7 @@ void AtomManager::shuffle()
         size_t index = rand() % i;
         tmp = _atoms[index];
         _atoms[index] = _atoms[i];
+        _atoms[index]->setIndex(index);
         _atoms[i] = tmp;
         _atoms[i]->setIndex(i);
     }
