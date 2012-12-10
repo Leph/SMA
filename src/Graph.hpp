@@ -143,7 +143,7 @@ class Graph
          * Le graphe local inclura tous les atomes
          * dans la sphère définie
          */
-        static const Ogre::Real DISTANCE_NEIGHBOURHOOD = 1000;
+        static const Ogre::Real DISTANCE_NEIGHBOURHOOD = 800;
 
         /**
          * Distance de seuil utilisée pour la construction
