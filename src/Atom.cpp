@@ -21,6 +21,7 @@ Atom::Atom(Real radius, const Vector3& position) :
     _brownianCounter(),
     _node(0),
     _bonds(),
+    _isFixed(false),
     _index(-1)
 {
     //initialisation du mouvement brownien
@@ -66,6 +67,11 @@ void Atom::setPosition(const Ogre::Vector3& position)
 void Atom::move(Real dt)
 {
     assert(dt > 0);
+
+    //Ne fait rien si l'atome est fixe
+    if (_isFixed) {
+        return;
+    }
 
     //Calcul des forces appliquées sur l'atome
     Vector3 force = Vector3(0, 0, 0);
@@ -168,6 +174,16 @@ size_t Atom::getIndex() const
 void Atom::setIndex(size_t index)
 {
     _index = index;
+}
+        
+bool Atom::isFixed() const
+{
+    return _isFixed;
+}
+        
+void Atom::setFixed(bool fixed)
+{
+    _isFixed = fixed;
 }
 
 void Atom::initNode

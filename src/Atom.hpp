@@ -124,6 +124,18 @@ class Atom
          */
         void setIndex(size_t index);
 
+        /**
+         * Renvoi true si l'atome
+         * ne doit pas être déplacé
+         */
+        bool isFixed() const;
+
+        /**
+         * Définie si l'atome doit être
+         * fixé. True pour le fixer.
+         */
+        void setFixed(bool fixed);
+
     protected:
 
         /**
@@ -161,6 +173,11 @@ class Atom
          * de l'atome
          */
         std::vector<Bond*> _bonds;
+
+        /**
+         *
+         */
+        bool _isFixed;
 
         /**
          * Indice de l'atome dans le conteneur

@@ -17,10 +17,7 @@ Graph::Graph() :
 
 Graph::~Graph()
 {
-    if (_node != 0) {
-        _node->removeAllChildren();
-        Global::getSceneManager()->destroySceneNode(_node);
-    }
+    clear();
 }
 
 void Graph::build(Atom* atom)
@@ -44,7 +41,11 @@ void Graph::build(Atom* atom)
     addVertex(atom);
     std::list<Atom*>::iterator it = neighbors.begin();
     while (it != neighbors.end()) {
-        addVertex(*it);
+        //On n'ajoute pas les atomes déjà fixed (en cours de
+        //transformation)
+        if (!(*it)->isFixed()) {
+            addVertex(*it);
+        }
         it++;
     }
 
@@ -76,6 +77,11 @@ void Graph::clear()
         _node->removeAllChildren();
         Global::getSceneManager()->destroySceneNode(_node);
         _node = 0;
+    }
+
+    //Désactive le fixed des atomes
+    for (size_t i=0;i<_vertices.size();i++) {
+        _vertices[i]->setFixed(false);
     }
 
     //Supprime les données
@@ -169,6 +175,9 @@ size_t Graph::addVertex(Atom* atom)
     for (size_t i=0;i<_vertices.size();i++) {
         assert(_vertices[i] != atom);
     }
+
+    //Définie l'atome comme fixe
+    atom->setFixed(true);
     
     _vertices.push_back(atom);
     _states.push_back(false);
