@@ -263,6 +263,7 @@ bool Transform::replaceAtom(size_t src, size_t dst) const
     dstOldAtom->transfertBonds(dstNewAtom);
     Global::getAtomManager()
         ->replace(dstOldAtom->getIndex(), dstNewAtom);
+    _graph.replace(dst, dstNewAtom);
     dstNewAtom->setPosition(position);
 
     return true;

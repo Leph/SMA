@@ -91,6 +91,12 @@ class Graph
          */
         size_t nextVertexBFS();
 
+        /**
+         * Remplace l'atome spécifié par son indice par
+         * un autre pointeur atom
+         */
+        void replace(size_t index, Atom* atom);
+
     private:
 
         /**

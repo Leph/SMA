@@ -167,6 +167,13 @@ size_t Graph::nextVertexBFS()
     return index;
 }
 
+void Graph::replace(size_t index, Atom* atom)
+{
+    assert(atom != 0);
+    assert(index >= 0 && index < _vertices.size());
+    _vertices[index] = atom;
+}
+
 size_t Graph::addVertex(Atom* atom)
 {
     assert(atom != 0);
