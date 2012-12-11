@@ -75,6 +75,18 @@ class Transform
         std::vector<Star> _dst;
 
         /**
+         * Parcours le graphe et construit la 
+         * transformation autour de l'atome d'action
+         * pour une étoile associée à une autre étoile
+         */
+        void buildTranformDoubleAssociation();
+
+        /**
+         * Not yet implemented
+         */
+        void buildTransformSimpleAssociation();
+
+        /**
          * Initialise le parcours du graphe
          * a partir des atomes d'application
          */
