@@ -53,15 +53,8 @@ class SimulationListener : public Ogre::FrameListener
         Ogre::Real _transformTimeCount;
 
         /**
-         * Container des graphes sur lesquels
-         * une transformation est en cours
-         */
-        std::vector<Graph*> _graphs;
-
-        /**
-         * Container des transformations associées
-         * au graphes
-         * _transforms[i] correspond à _graphs[i]
+         * Container des transformations 
+         * en cours d'executions
          */
         std::vector<Transform*> _transforms;
 

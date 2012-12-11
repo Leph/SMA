@@ -15,7 +15,7 @@ class TransformLambda : public Transform
          * Contruit la transformation lambda
          * à partir du graphe local
          */
-        TransformLambda(Graph& graph);
+        TransformLambda(Graph* graph);
 
         /**
          * Implémente doTransform

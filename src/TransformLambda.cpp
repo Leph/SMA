@@ -4,11 +4,11 @@
 #include "TransformLambda.hpp"
 #include "Atoms.hpp"
 
-TransformLambda::TransformLambda(Graph& graph) :
+TransformLambda::TransformLambda(Graph* graph) :
     Transform(graph)
 {
-    assert(_graph.sizeVertex() > 0);
-    assert(_graph.getVertex(0)->isType<Atom_Lambda>());
+    assert(_graph->sizeVertex() > 0);
+    assert(_graph->getVertex(0)->isType<Atom_Lambda>());
 
     //Construit la transformation
     //On cherche une étoiles associée avec une autre étoile
@@ -20,7 +20,7 @@ bool TransformLambda::doTransformStep()
     assert(_isValid);
 
     //Parcours un sommet du graphe
-    size_t index = _graph.nextVertexBFS();
+    size_t index = _graph->nextVertexBFS();
     if (index == -1) {
         return false;
     }

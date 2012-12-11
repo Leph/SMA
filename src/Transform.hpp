@@ -20,7 +20,12 @@ class Transform
          * Initialise la transformation à partir
          * du graph local
          */
-        Transform(Graph& graph);
+        Transform(Graph* graph);
+
+        /**
+         * Désallacation du graphe interne
+         */
+        virtual ~Transform();
 
         /**
          * Renvoi true si la transformation
@@ -48,7 +53,7 @@ class Transform
          * Le graph sur lequel porte 
          * la transformation
          */
-        Graph& _graph;
+        Graph* _graph;
 
         /**
          * Liste des atomes d'applications

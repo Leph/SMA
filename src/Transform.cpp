@@ -7,13 +7,19 @@
 using Ogre::Real;
 using Ogre::Vector3;
 
-Transform::Transform(Graph& graph) :
+Transform::Transform(Graph* graph) :
     _isValid(false),
     _graph(graph),
     _apply(),
     _src(),
     _dst()
 {
+    assert(_graph != 0);
+}
+
+Transform::~Transform()
+{
+    delete _graph;
 }
 
 bool Transform::isValid() const
@@ -24,12 +30,12 @@ bool Transform::isValid() const
 void Transform::buildTranformDoubleAssociation()
 {
     //Parcours des voisins de l'atome d'action
-    size_t sizeEdgeAction = _graph.sizeEdge(0);
+    size_t sizeEdgeAction = _graph->sizeEdge(0);
     for (size_t i=0;i<sizeEdgeAction;i++) {
-        size_t srcIndex = _graph.getEdge(0, i);
+        size_t srcIndex = _graph->getEdge(0, i);
         //Si il s'agit d'un atome d'application
         //on l'enregistre
-        if (_graph.getVertex(srcIndex)
+        if (_graph->getVertex(srcIndex)
             ->isType<Atom_Apply>()
         ) {
             _apply.push_back(Star(srcIndex, 0));
@@ -40,12 +46,12 @@ void Transform::buildTranformDoubleAssociation()
             //Parcours des voisins de l'atome
             //On cherche les atomes d'association
             size_t sizeEdgeSrc = _graph
-                .sizeEdge(srcIndex);
+                ->sizeEdge(srcIndex);
             size_t associationFounded = 0;
             size_t associationIndex = 0;
             for (size_t j=0;j<sizeEdgeSrc;j++) {
-                size_t index = _graph.getEdge(srcIndex, j);
-                if (_graph.getVertex(index)
+                size_t index = _graph->getEdge(srcIndex, j);
+                if (_graph->getVertex(index)
                     ->isType<Atom_Association>()
                 ) {
                     associationFounded++;
@@ -55,12 +61,12 @@ void Transform::buildTranformDoubleAssociation()
             //Si un unique atome d'association est trouvé
             //on vérifie qu'il ne lie que deux atomes
             if (associationFounded == 1) {
-                if (_graph.sizeEdge(associationIndex) == 2) {
+                if (_graph->sizeEdge(associationIndex) == 2) {
                     size_t dstIndex = 
-                        _graph.getEdge(associationIndex, 0) == 
+                        _graph->getEdge(associationIndex, 0) == 
                         srcIndex ? 
-                        _graph.getEdge(associationIndex, 1) : 
-                        _graph.getEdge(associationIndex, 0);
+                        _graph->getEdge(associationIndex, 1) : 
+                        _graph->getEdge(associationIndex, 0);
                     _src.push_back(
                         Star(srcIndex, 0, associationIndex));
                     _dst.push_back(
@@ -87,22 +93,22 @@ void Transform::initTraversing()
 {
     assert(_isValid);
     //Initialise la parcours en largeur
-    _graph.initBFS();
+    _graph->initBFS();
     for (size_t i=0;i<_apply.size();i++) {
         //Met l'atome d'application comme parcouru
         size_t center = _apply[i].center();
-        _graph.setState(center, true);
+        _graph->setState(center, true);
         //Ajoute comme sommet à parcourir les voisins de 
         //l'atome d'application différent des atomes excluts
         //(non encore ajoutés)
-        for (size_t j=0;j<_graph.sizeEdge(center);j++) {
-            size_t index = _graph.getEdge(center, j);
+        for (size_t j=0;j<_graph->sizeEdge(center);j++) {
+            size_t index = _graph->getEdge(center, j);
             if (
                 _apply[i].exclude1() != index &&
                 _apply[i].exclude2() != index &&
-                _graph.getState(index) == false
+                _graph->getState(index) == false
             ) {
-                _graph.addVertexToBFS(index);
+                _graph->addVertexToBFS(index);
             }
         }
     }
@@ -114,16 +120,16 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     assert(matches.empty());
     size_t srcIndex = src.center();
     size_t dstIndex = dst.center();
-    Atom* srcCenter = _graph.getVertex(srcIndex);
-    Atom* dstCenter = _graph.getVertex(dstIndex);
+    Atom* srcCenter = _graph->getVertex(srcIndex);
+    Atom* dstCenter = _graph->getVertex(dstIndex);
 
     //Test en premier si le centre de l'étoile correspond
     if (srcCenter->isRepresent(dstCenter) == false) {
         return false;
     }
 
-    size_t srcSize = _graph.sizeEdge(srcIndex);
-    size_t dstSize = _graph.sizeEdge(dstIndex);
+    size_t srcSize = _graph->sizeEdge(srcIndex);
+    size_t dstSize = _graph->sizeEdge(dstIndex);
 
     //Liste des atomes voisins se src non exclus
     //Contient l'indice réel des atomes dans le graphe
@@ -135,7 +141,7 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     //Parcours les voisins de l'atome src et
     //Remplie srdEdges avec les non exclus
     for (size_t i=0;i<srcSize;i++) {
-        size_t index = _graph.getEdge(srcIndex, i);
+        size_t index = _graph->getEdge(srcIndex, i);
         if (
             src.exclude1() != index &&
             src.exclude2() != index
@@ -146,7 +152,7 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     //Parcours les voisins de l'atome dst et
     //Remplie dstEdges avec les non exclus
     for (size_t i=0;i<dstSize;i++) {
-        size_t index = _graph.getEdge(dstIndex, i);
+        size_t index = _graph->getEdge(dstIndex, i);
         if (
             dst.exclude1() != index &&
             dst.exclude2() != index
@@ -181,9 +187,9 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     for (size_t i=0;i<srcEdges.size();i++) {
         for (size_t j=0;j<dstEdges.size();j++) {
             if (
-                _graph.getVertex(srcEdges[i])
+                _graph->getVertex(srcEdges[i])
                 ->isRepresent(
-                    _graph.getVertex(dstEdges[j]))
+                    _graph->getVertex(dstEdges[j]))
             ) {
                 srcLinks[i].push_back(j);
                 dstLinks[j].push_back(i);
@@ -346,9 +352,9 @@ bool Transform::replaceAtom(size_t src, size_t dst) const
         return true;
     }
 
-    Atom* dstOldAtom = _graph.getVertex(dst);
+    Atom* dstOldAtom = _graph->getVertex(dst);
     const Vector3& position = dstOldAtom->getPosition();
-    Real radius = _graph.getVertex(src)->getRadius();
+    Real radius = _graph->getVertex(src)->getRadius();
 
     //Test si il y a la place de remplacer l'atome
     //dst par un atome src peut être plus gros
@@ -365,11 +371,11 @@ bool Transform::replaceAtom(size_t src, size_t dst) const
     //Place le nouvel atome et supprime l'ancien
     //dans l'atome manager ainsi que
     //dans le graph
-    Atom* dstNewAtom = _graph.getVertex(src)->create();
+    Atom* dstNewAtom = _graph->getVertex(src)->create();
     dstOldAtom->transfertBonds(dstNewAtom);
     Global::getAtomManager()
         ->replace(dstOldAtom->getIndex(), dstNewAtom);
-    _graph.replace(dst, dstNewAtom);
+    _graph->replace(dst, dstNewAtom);
     dstNewAtom->setPosition(position);
 
     return true;

@@ -15,7 +15,7 @@ class TransformBound : public Transform
          * Contruit la transformation bound
          * à partir du graphe local
          */
-        TransformBound(Graph& graph);
+        TransformBound(Graph* graph);
 
         /**
          * Implémente doTransform

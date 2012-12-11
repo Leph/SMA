@@ -7,7 +7,6 @@ using Ogre::FrameEvent;
 
 SimulationListener::SimulationListener() :
     _transformTimeCount(SimulationListener::TRANSFORM_FREQ),
-    _graphs(),
     _transforms()
 {
 }
@@ -32,9 +31,6 @@ bool SimulationListener::frameRenderingQueued
 
     if (_transformTimeCount <= 0.0) {
         //Cherches des transformations à appliquées
-        //L'atome d'action ne doit pas être déjà la source
-        //d'une autre transformation 
-        //(donc ne doit pas être fixed)
         for (size_t i=0;i<size;i++) {
             if (
                 Global::getAtomManager()->get(i)
@@ -48,22 +44,21 @@ bool SimulationListener::frameRenderingQueued
                 graph->build(Global::getAtomManager()
                     ->get(i));
                 Transform* transform = 
-                    new TransformLambda(*graph);
+                    new TransformLambda(graph);
                 if (transform->isValid()) {
-                    _graphs.push_back(graph);
                     _transforms.push_back(transform);
                 } else {
+                    //La désallocation de la transformation
+                    //désalloue la graphe
                     delete transform;
-                    delete graph;
                 }
             }
         }
-        assert(_graphs.size() == _transforms.size());
         //Avance d'une étape toutes les transformations 
         //en cours
         //et supprime les transformations finies
         size_t j = 0;
-        while (j < _graphs.size()) {
+        while (j < _transforms.size()) {
             bool isContinued = _transforms[j]
                 ->doTransformStep();
             if (!isContinued) {
@@ -71,9 +66,6 @@ bool SimulationListener::frameRenderingQueued
                 _transforms[j] = 
                     _transforms[_transforms.size()-1];
                 _transforms.pop_back();
-                delete _graphs[j];
-                _graphs[j] = _graphs[_graphs.size()-1];
-                _graphs.pop_back();
             }
             j++;
         }
