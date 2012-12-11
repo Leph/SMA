@@ -194,7 +194,11 @@ void Application::initSimulation()
         else if (r>=60) a = new Atom_Apply_Virt(position);
         else if (r>=50) a = new Atom_Association(position);
         else if (r>=40) a = new Atom_Association_Virt(position);
-        else if (r>=20) a = new Atom_Term(
+        else if (r>=35) a = new Atom_Bound(position);
+        else if (r>=30) a = new Atom_Bound_Virt(position);
+        else if (r>=25) a = new Atom_Unbound(position);
+        else if (r>=20) a = new Atom_Unbound_Virt(position);
+        else if (r>=10) a = new Atom_Term(
             position, 
             (int)Math::RangeRandom(0.0, 2.0)
         );

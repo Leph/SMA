@@ -9,7 +9,7 @@ Atom_Lambda_Virt::Atom_Lambda_Virt(const Vector3& position) :
 {
     //Création de l'apparence graphique de l'atome
     initNode(
-        Geometry::sphere(10), 
+        Geometry::sphere(3),
         ColourValue(0.5, 1.0, 0.5, 1.0)
     );
 }
