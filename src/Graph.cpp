@@ -172,6 +172,10 @@ void Graph::replace(size_t index, Atom* atom)
     assert(atom != 0);
     assert(index >= 0 && index < _vertices.size());
     _vertices[index] = atom;
+
+    //Assure que l'atome ajouté dans le graphe 
+    //est bien fixe
+    atom->setFixed(true);
 }
 
 size_t Graph::addVertex(Atom* atom)

@@ -57,9 +57,15 @@ const Vector3& Atom::getPosition() const
 
 void Atom::setPosition(const Ogre::Vector3& position)
 {
+    //Mise à jour de la position et du noeud Ogre
     _position = position;
     _node->setPosition(_position);
     
+    //Mise à jour des liaisons de l'atome
+    for (size_t i=0;i<_bonds.size();i++) {
+        _bonds[i]->updateNode();
+    }
+
     //Mise à jour des structures Ogre de la scene (octree)
     Global::getSceneManager()->_updateSceneGraph(0);
 }
@@ -82,17 +88,8 @@ void Atom::move(Real dt)
     Vector3 motion = force*dt;
     //Vérification des collisions et autres contraintes
     //spatial
-    _position = Global::getPositionResolver()
-        ->resolve(this, motion);
-    _node->setPosition(_position);
-
-    //Mise à jour des liaisons de l'atome
-    for (size_t i=0;i<_bonds.size();i++) {
-        _bonds[i]->updateNode();
-    }
-
-    //Mise à jour des structures Ogre de la scene (octree)
-    Global::getSceneManager()->_updateSceneGraph(0);
+    setPosition(Global::getPositionResolver()
+        ->resolve(this, motion));
 }
         
 void Atom::addBond(Bond* bond)

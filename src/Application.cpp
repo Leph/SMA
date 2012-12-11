@@ -211,6 +211,7 @@ void Application::initSimulation()
             delete a;
         }
     }
+    
     /*
     _atoms->createBond(
         _atoms->get(0),

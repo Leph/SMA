@@ -80,7 +80,6 @@ bool SimulationListener::frameRenderingQueued
         //Reset le compteur de temps
         _transformTimeCount = 
             SimulationListener::TRANSFORM_FREQ;
-        std::cout << "Size : " << Global::getAtomManager()->getSize() << std::endl;
     } else {
         //Incrémente le compteur de temps
         _transformTimeCount -= SimulationListener::STEP_TIME;
