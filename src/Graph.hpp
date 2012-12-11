@@ -151,7 +151,7 @@ class Graph
          * Si la distance entre deux atomes est inférieure
          * à cette distance, une arrête est créée
          */
-        static const Ogre::Real DISTANCE_EDGE = 500;
+        static const Ogre::Real DISTANCE_EDGE = 600;
 
         /**
          * Ajoute le sommet spécifié

@@ -50,7 +50,6 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     std::vector<size_t>& matches) const
 {
     assert(matches.empty());
-    std::cout << "====Match Star===" << std::endl;
     size_t srcIndex = src.center();
     size_t dstIndex = dst.center();
     Atom* srcCenter = _graph.getVertex(srcIndex);
@@ -58,14 +57,11 @@ bool Transform::matchStar(const Star& src, const Star& dst,
 
     //Test en premier si le centre de l'étoile correspond
     if (srcCenter->isRepresent(dstCenter) == false) {
-        std::cout << "No same center" << std::endl;
         return false;
     }
 
     size_t srcSize = _graph.sizeEdge(srcIndex);
     size_t dstSize = _graph.sizeEdge(dstIndex);
-    std::cout << "srcSize " << srcSize << std::endl;
-    std::cout << "dstSize " << dstSize << std::endl;
 
     //Liste des atomes voisins se src non exclus
     //Contient l'indice réel des atomes dans le graphe
@@ -96,14 +92,11 @@ bool Transform::matchStar(const Star& src, const Star& dst,
             dstEdges.push_back(index);
         }
     }
-    std::cout << "srcEdges " << srcEdges.size() << std::endl;
-    std::cout << "dstEdges " << dstEdges.size() << std::endl;
 
     //Test si les voisins de dst sont au moins aussi
     //nombreux que les voisins de src (sinon, peut pas
     //être injectif)
     if (srcEdges.size() > dstEdges.size()) {
-        std::cout << "Not injective" << std::endl;
         return false;
     }
 
@@ -118,8 +111,10 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     //dstLinks[i] correspond à dstEdges[i]
     //contient la liste des indices des atomes
     //correspondant à srcEdges[j]
-    std::vector< std::vector<size_t> > srcLinks(srcEdges.size());
-    std::vector< std::vector<size_t> > dstLinks(dstEdges.size());
+    std::vector< std::vector<size_t> > 
+        srcLinks(srcEdges.size());
+    std::vector< std::vector<size_t> > 
+        dstLinks(dstEdges.size());
 
     for (size_t i=0;i<srcEdges.size();i++) {
         for (size_t j=0;j<dstEdges.size();j++) {
@@ -136,7 +131,6 @@ bool Transform::matchStar(const Star& src, const Star& dst,
         //ont au moins un atome voisin de dst
         //qui lui correspond
         if (srcLinks[i].size() == 0) {
-            std::cout << "No represent" << std::endl;
             return false;
         }
     }
@@ -146,72 +140,135 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     std::vector<size_t> srcMatching(srcEdges.size(), -1);
     std::vector<size_t> dstMatching(dstEdges.size(), -1);
 
-    //Initialise le couplage pour chaque atomes src si possible
+    //Initialise le couplage pour chaque atomes 
+    //src si possible
     for (size_t i=0;i<srcEdges.size();i++) {
         for (size_t j=0;j<srcLinks[i].size();j++) {
             if (dstMatching[srcLinks[i][j]] != -1) {
                 assert(srcMatching[i] == -1);
                 srcMatching[i] = srcLinks[i][j];
                 dstMatching[srcLinks[i][j]] = i;
+                assert(dstMatching[srcMatching[i]] == i);
                 break;
             }
         }
     }
 
-    //Défini une liste pour le parcours en largeur
-    std::list<size_t> bfs;
+    //Défini les structures de données pour le parcours 
+    //en largeur et la construction de l'arbre alterné
+    //Nodes contient les index des vertex dans srdEdges 
+    //ou dstEdges
+    //Parents contient l'index du sommet parent dans nodes
+    //Sides vaut true si le sommet correpondant dans nodes 
+    //et parents
+    //appartient au coté src (sinon, dst)
+    std::vector<size_t> nodes;
+    std::vector<size_t> parents;
+    std::vector<bool> sides;
+
+    //Garde en mémoire les sommets ayant été parcourus
+    std::vector<bool> srcStates;
+    std::vector<bool> dstStates;
 
     //Applique l'algorithme tant qu'un chemin améliorant
     //est trouvé
-    bool changed = true;
-    while (changed) {
-        changed = false;
+    bool founded = true;
+    while (founded) {
+        founded = false;
         //On recherche un sommets de src non saturé
         for (size_t i=0;i<srcEdges.size();i++) {
             if (srcMatching[i] == -1) {
                 //On cherche par un parcours en largeur
                 //du graphe un chemin alterné améliorant
-                bfs.clear();
-                bfs.push_back(i);
-                size_t from = -1;
-                bool even = true;
-                while () {
-                    size_t current = bfs.front();
-                    bfs.pop_front();
-                    if (!event && dstMatching[current] == -1) {
-                        //
+                nodes.clear();
+                nodes.push_back(i);
+                parents.clear();
+                parents.push_back(-1);
+                sides.clear();
+                sides.push_back(true);
+                srcStates.assign(srcEdges.size(), false);
+                dstStates.assign(dstEdges.size(), false);
+                srcStates[i] = true;
+                size_t index = 0;
+                while (true) {
+                    assert(nodes.size() == parents.size());
+                    assert(nodes.size() == sides.size());
+                    //Si la liste est vide, on a tous parcouru
+                    if (index >= nodes.size()) {
+                        break;
                     }
-                    size_t size = even ? srcLinks[current].size() : dstLinks[current].size();
-                    for (size_t j=0;j<size;j++) {
-                        size_t index = even ? srcLinks[current][j] : dstLinks[current][j];
-                        if (index != from) {
-                            bfs.push_back(index);
+                    assert(index < nodes.size());
+                    size_t current = nodes[index];
+                    //On test si on a trouvé un chemin
+                    //augmentant
+                    if (
+                        !sides[index] && 
+                        dstMatching[current] == -1
+                    ) {
+                        founded = true;
+                        break;
+                    }
+                    //Sinon on continue le parcours en 
+                    //ajoutant le successeur du sommet courant 
+                    //(sans remonté dans l'arbre)
+                    //si on est du coté src
+                    if (sides[index]) {
+                        size_t size = srcLinks[current].size();
+                        for (size_t j=0;j<size;j++) {
+                            size_t next = srcLinks[current][j];
+                            if (dstStates[next] == false) {
+                                nodes.push_back(next);
+                                parents.push_back(index);
+                                sides.push_back(false);
+                                dstStates[next] = true;
+                            }
                         }
+                    } 
+                    //Si on est du coté dst, on suit l'arrête
+                    //qui est dans le couplage
+                    else {
+                        size_t next = dstMatching[current];
+                        assert(next != -1);
+                        assert(srcStates[next] == false);
+                        nodes.push_back(next);
+                        parents.push_back(index);
+                        sides.push_back(true);
+                        srcStates[next] = true;
                     }
-                    from = current;
+                    index++;
                 }
-                if () {
-                    changed = true;
+                //Si on a trouvé un chemin augmentant
+                //on met à jours les couplages
+                if (founded) {
+                    while (index != -1) {
+                        assert(sides[index] == false);
+                        assert(parents[index] != -1);
+                        dstMatching[nodes[index]] = 
+                            nodes[parents[index]];
+                        srcMatching[nodes[parents[index]]] = 
+                            nodes[index];
+                        assert(dstMatching[srcMatching[nodes[parents[index]]]] == nodes[parents[index]]);
+                        assert(srcMatching[dstMatching[nodes[index]]] == nodes[index]);
+                        index = parents[parents[index]];
+                    }
                     break;
                 }
             }
         }
     }
 
-    //
-    for (size_t i=0;i<srcEdges.size();i++) {
+    //On test si tous les sommets src sont associés
+    for (size_t i=0;i<srcMatching.size();i++) {
         if (srcMatching[i] == -1) {
-            std::cout << "No matching" << std::endl;
-            return;
-        }
+            return false;
+        } 
+        assert(dstMatching[srcMatching[i]] == i);
     }
 
-    //...
-
-    //Les voisins de dst correspondants sont insérés dans 
-    //matches
-    for (size_t i=0;i<used.size();i++) {
-        if (used[i]) {
+    //Sinon, les voisins de dst correspondants 
+    //sont insérés dans matches
+    for (size_t i=0;i<dstMatching.size();i++) {
+        if (dstMatching[i] != -1) {
             matches.push_back(dstEdges[i]);
         }
     }

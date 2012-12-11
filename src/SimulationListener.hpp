@@ -25,7 +25,8 @@ class SimulationListener : public Ogre::FrameListener
          * la mise à jour de la simulation
          * FrameListener
          */
-        virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
+        virtual bool frameRenderingQueued
+            (const Ogre::FrameEvent& event);
 
     private:
 
