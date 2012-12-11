@@ -105,123 +105,108 @@ bool Transform::matchStar(const Star& src, const Star& dst,
     if (srcEdges.size() > dstEdges.size()) {
         std::cout << "Not injective" << std::endl;
         return false;
-    } 
+    }
 
-    //Liste les liens possibles des atomes voisins
-    //de src avec les atomes voisins de dst
-    //links[i] correspond au i-ème atome dans srcEdge[i]
-    //Les indices des atomes voisins de dst dans links[i] j
-    //correspondent aux atomes j-ième atome dans dstEdge[j]
-    std::vector< std::vector<size_t> > links;
+    //Calcul le matching de deux graphes biparti en temps
+    //polynomial. Utilise le concepte de couplage et de
+    //chemins alternés augmentant
 
-    //Parcours les voisins de src et dst pour 
-    //remplir links
+    //Construit le graphe biparti
+    //srcLinks[i] correspond à srcEdges[i]
+    //contient la liste des indices des atomes
+    //correspondant à dstEdges[j]
+    //dstLinks[i] correspond à dstEdges[i]
+    //contient la liste des indices des atomes
+    //correspondant à srcEdges[j]
+    std::vector< std::vector<size_t> > srcLinks(srcEdges.size());
+    std::vector< std::vector<size_t> > dstLinks(dstEdges.size());
+
     for (size_t i=0;i<srcEdges.size();i++) {
-        links.push_back(std::vector<size_t>());
         for (size_t j=0;j<dstEdges.size();j++) {
             if (
                 _graph.getVertex(srcEdges[i])
                 ->isRepresent(
                     _graph.getVertex(dstEdges[j]))
             ) {
-                links[links.size()-1].push_back(j);
+                srcLinks[i].push_back(j);
+                dstLinks[j].push_back(i);
             }
         }
         //Test si tous les atomes voisins de src
         //ont au moins un atome voisin de dst
         //qui lui correspond
-        if (links[links.size()-1].size() == 0) {
+        if (srcLinks[i].size() == 0) {
             std::cout << "No represent" << std::endl;
             return false;
         }
     }
-    assert(links.size() == srcEdges.size());
-    
-    //Contient pour chaque atomes voisins de src l'indice
-    //du voisin de dst auquel il est lié
-    //association[i]=j correspond à srdEdges[i] et j
-    //correspond ) dstEdges[links[i][j]]
-    std::vector<size_t> associations;
+   
+    //Contient pour les atomes src et dst l'atome de l'autre
+    //coté au quel il est lié. -1 si pas de liaison
+    std::vector<size_t> srcMatching(srcEdges.size(), -1);
+    std::vector<size_t> dstMatching(dstEdges.size(), -1);
 
-    //Contient pour chaque atomes voisins de dst non
-    //exclut un booleen indiquant si l'atomes est utilisé (lié)
-    //dans le tableau d'association
-    //used[i] correspond à dstEdges[i]
-    std::vector<bool> used;
-
-    //Initialise associations avec les premières
-    //valeurs possibles dans links pour tous les atomes
-    for (size_t i=0;i<links.size();i++) {
-        associations.push_back(0);
-    }
-    assert(associations.size() == srcEdges.size());
-
-    //Initialise les états de used à non
-    //utilisé
-    for (size_t i=0;i<dstEdges.size();i++) {
-        used.push_back(false);
-    }
-    assert(used.size() == dstEdges.size());
-
-    while(true) {
-        std::cout << ">>> loop " << std::endl;
-        //Reset les valeurs de used
-        for (size_t i=0;i<used.size();i++) {
-            used[i] = false;
-        }
-        //Test si la configuration est valide
-        bool matched = true;
-        for (size_t i=0;i<associations.size();i++) {
-            //On regarde si un voisins de dst est utilisé 
-            //deux fois
-            if (used[links[i][associations[i]]] == true) {
-                //La configuration est invalide, on sort de la
-                //boucle
-                matched = false;
-                break;
-            } else {
-                //La configuration est valide pour le moment
-                used[links[i][associations[i]]] = true;
-            }
-        }
-        //Si la configuration est valide, on sort de la boucle
-        //d'exploration
-        //Sinon on incrémente
-        if (matched) {
-            std::cout << "Valid !" << std::endl;
-            break;
-        }
-        //Incrémente de "un" le vecteur
-        //des associations (itération sur
-        //toutes les valeurs possibles)
-        size_t digit = 0;
-        while (true) {
-            std::cout << "   loop digit " << digit << "(" << links[digit].size() << ") " << associations[digit] << " " << associations.size() << std::endl;
-            //On incrémente le digit
-            associations[digit]++;
-            //Si on dépasse les valeurs possible
-            //on retourne à 0 et on continue avec le 
-            //prochain digit
-            if (associations[digit] == links[digit].size()) {
-                associations[digit] = 0;
-                std::cout << "carry true" << std::endl;
-            }
-            //Sinon, on sort de la boucle, le vecteur est
-            //incrémenté
-            else {
-                std::cout << "carry false" << std::endl;
+    //Initialise le couplage pour chaque atomes src si possible
+    for (size_t i=0;i<srcEdges.size();i++) {
+        for (size_t j=0;j<srcLinks[i].size();j++) {
+            if (dstMatching[srcLinks[i][j]] != -1) {
+                assert(srcMatching[i] == -1);
+                srcMatching[i] = srcLinks[i][j];
+                dstMatching[srcLinks[i][j]] = i;
                 break;
             }
-            digit++;
-            //Si on a parcourus tous le vecteur
-            //association, celà veut dire que l'ont a testé
-            //toutes les valeurs sans résultat
-            if (digit == associations.size()) {
-                std::cout << "Overflow, break" << std::endl;
-                return false;
+        }
+    }
+
+    //Défini une liste pour le parcours en largeur
+    std::list<size_t> bfs;
+
+    //Applique l'algorithme tant qu'un chemin améliorant
+    //est trouvé
+    bool changed = true;
+    while (changed) {
+        changed = false;
+        //On recherche un sommets de src non saturé
+        for (size_t i=0;i<srcEdges.size();i++) {
+            if (srcMatching[i] == -1) {
+                //On cherche par un parcours en largeur
+                //du graphe un chemin alterné améliorant
+                bfs.clear();
+                bfs.push_back(i);
+                size_t from = -1;
+                bool even = true;
+                while () {
+                    size_t current = bfs.front();
+                    bfs.pop_front();
+                    if (!event && dstMatching[current] == -1) {
+                        //
+                    }
+                    size_t size = even ? srcLinks[current].size() : dstLinks[current].size();
+                    for (size_t j=0;j<size;j++) {
+                        size_t index = even ? srcLinks[current][j] : dstLinks[current][j];
+                        if (index != from) {
+                            bfs.push_back(index);
+                        }
+                    }
+                    from = current;
+                }
+                if () {
+                    changed = true;
+                    break;
+                }
             }
         }
     }
+
+    //
+    for (size_t i=0;i<srcEdges.size();i++) {
+        if (srcMatching[i] == -1) {
+            std::cout << "No matching" << std::endl;
+            return;
+        }
+    }
+
+    //...
 
     //Les voisins de dst correspondants sont insérés dans 
     //matches
