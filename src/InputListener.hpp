@@ -28,7 +28,8 @@ public:
      * @param window : la fenètre de l'application
      * @param camera : la camera à gérer
      */
-    InputListener(Ogre::RenderWindow* window, Ogre::Camera* camera);
+    InputListener
+        (Ogre::RenderWindow* window, Ogre::Camera* camera);
 
     /**
      * Détache l'instance de la gestion des entrées
@@ -36,7 +37,8 @@ public:
     ~InputListener();
 
     /**
-     * Implémente la callback de redimentionnement de la fenètre
+     * Implémente la callback de redimentionnement 
+     * de la fenètre
      * WindowEventListener
      */
     virtual void windowResized(Ogre::RenderWindow* window);
@@ -66,7 +68,8 @@ public:
      * entrées utilisateurs
      * FrameListener
      */
-    virtual bool frameRenderingQueued(const Ogre::FrameEvent& event);
+    virtual bool frameRenderingQueued
+        (const Ogre::FrameEvent& event);
 
 private:
 

@@ -42,6 +42,12 @@ class Global
         static Terrain* getTerrain();
         static void setTerrain(Terrain* terrain);
 
+        /**
+         * Renvoi et défini si la simulation est activé
+         */
+        static bool isRunSimulation();
+        static bool setRunSimulation(bool run);
+
     private:
 
         /**
@@ -68,6 +74,12 @@ class Global
          * Instance globale du terrain
          */
         static Terrain* _terrain;
+
+        /**
+         * Vaut true si la simulation est activé
+         * Stop la simulation sinon
+         */
+        static bool _runSimulation;
 };
 
 #endif

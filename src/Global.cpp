@@ -11,6 +11,7 @@ SceneManager* Global::_sceneManager = 0;
 AtomManager* Global::_atomManager = 0;
 PositionResolver* Global::_positionResolver = 0;
 Terrain* Global::_terrain = 0;
+bool Global::_runSimulation = false;
 
 SceneManager* Global::getSceneManager()
 {
@@ -59,5 +60,15 @@ void Global::setTerrain(Terrain* terrain)
 {
     assert(terrain != 0);
     Global::_terrain = terrain;
+}
+
+bool Global::isRunSimulation()
+{
+    return _runSimulation;
+}
+        
+bool Global::setRunSimulation(bool run)
+{
+    _runSimulation = run;
 }
 

@@ -1,4 +1,5 @@
 #include "InputListener.hpp"
+#include "Global.hpp"
 
 using Ogre::RenderWindow;
 using Ogre::Camera;
@@ -14,7 +15,8 @@ using OIS::Mouse;
 using OIS::MouseState;
 using OIS::KeyEvent;
 
-InputListener::InputListener(RenderWindow* window, Camera* camera) :
+InputListener::InputListener
+    (RenderWindow* window, Camera* camera) :
     _window(window),
     _camera(camera),
     _inputManager(0),
@@ -31,7 +33,8 @@ InputListener::InputListener(RenderWindow* window, Camera* camera) :
 
 InputListener::~InputListener()
 {
-    WindowEventUtilities::removeWindowEventListener(_window, this);
+    WindowEventUtilities::removeWindowEventListener(
+        _window, this);
     windowClosed(_window);
 }
 
@@ -70,10 +73,16 @@ bool InputListener::keyPressed(const OIS::KeyEvent& e)
 
 bool InputListener::keyReleased(const OIS::KeyEvent& e)
 {
+    if (e.key == OIS::KC_SPACE) {
+        bool run = Global::isRunSimulation();
+        Global::setRunSimulation(!run);
+    }
+
     return true;
 }
 
-bool InputListener::frameRenderingQueued(const FrameEvent& event)
+bool InputListener::frameRenderingQueued
+    (const FrameEvent& event)
 {
     //Test la fermeture de la fenètre
     if(_window->isClosed()) {
@@ -89,28 +98,32 @@ bool InputListener::frameRenderingQueued(const FrameEvent& event)
         return false;
     }
     if (_keyboard->isKeyDown(OIS::KC_Z)) {
-        _camera->moveRelative(
-            Vector3(0, 0, -CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame));
+        _camera->moveRelative(Vector3(0, 0, 
+            -CAMERA_KEYBOARD_VELOCITY
+            *event.timeSinceLastFrame));
     }
     if (_keyboard->isKeyDown(OIS::KC_S)) {
-        _camera->moveRelative(
-            Vector3(0, 0, CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame));
+        _camera->moveRelative(Vector3(0, 0, 
+            CAMERA_KEYBOARD_VELOCITY
+            *event.timeSinceLastFrame));
     }
     if (_keyboard->isKeyDown(OIS::KC_Q)) {
-        _camera->moveRelative(
-            Vector3(-CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame, 0, 0));
+        _camera->moveRelative(Vector3(
+            -CAMERA_KEYBOARD_VELOCITY
+            *event.timeSinceLastFrame, 0, 0));
     }
     if (_keyboard->isKeyDown(OIS::KC_D)) {
-        _camera->moveRelative(
-            Vector3(CAMERA_KEYBOARD_VELOCITY*event.timeSinceLastFrame, 0, 0));
+        _camera->moveRelative(Vector3(
+            CAMERA_KEYBOARD_VELOCITY
+            *event.timeSinceLastFrame, 0, 0));
     }
     
     //Gère la réponse aux évènements sourie
     const MouseState& ms = _mouse->getMouseState();
-    _camera->yaw(
-        Degree(-CAMERA_MOUSE_VELOCITY*ms.X.rel*event.timeSinceLastFrame));
-    _camera->pitch(
-        Degree(-CAMERA_MOUSE_VELOCITY*ms.Y.rel*event.timeSinceLastFrame));
+    _camera->yaw(Degree(-CAMERA_MOUSE_VELOCITY*ms.X.rel
+        *event.timeSinceLastFrame));
+    _camera->pitch(Degree(-CAMERA_MOUSE_VELOCITY*ms.Y.rel
+        *event.timeSinceLastFrame));
  
     return true;
 }
@@ -123,22 +136,27 @@ void InputListener::startOIS()
     std::ostringstream windowHndStr;
     _window->getCustomAttribute("WINDOW", &windowHnd);
     windowHndStr << windowHnd;
-    pl.insert(std::make_pair(std::string("WINDOW"), windowHndStr.str()));
+    pl.insert(
+        std::make_pair(std::string("WINDOW"), 
+        windowHndStr.str()));
 
     //Création du gestionnaire d'évènement
     _inputManager = InputManager::createInputSystem(pl);
 
     //Création des objets clavier et sourie
-    _keyboard = static_cast<Keyboard*>
-        (_inputManager->createInputObject(OIS::OISKeyboard, true));
-    _mouse = static_cast<Mouse*>
-        (_inputManager->createInputObject(OIS::OISMouse, true));
+    _keyboard = static_cast<Keyboard*>(_inputManager
+        ->createInputObject(OIS::OISKeyboard, true));
+    _mouse = static_cast<Mouse*>(_inputManager
+        ->createInputObject(OIS::OISMouse, true));
 
-    //Attache l'instance au gestionnaire d'évènement de la fenètre
+    //Attache l'instance au gestionnaire d'évènement 
+    //de la fenètre
     windowResized(_window);
-    WindowEventUtilities::addWindowEventListener(_window, this);
+    WindowEventUtilities::
+        addWindowEventListener(_window, this);
 
-    //Attache l'instance au gestionnaire d'évènement du clavier
+    //Attache l'instance au gestionnaire d'évènement 
+    //du clavier
     _keyboard->setEventCallback(this);
 }
 

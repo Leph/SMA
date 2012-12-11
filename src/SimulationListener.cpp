@@ -15,6 +15,11 @@ SimulationListener::SimulationListener() :
 bool SimulationListener::frameRenderingQueued
     (const FrameEvent& event)
 {
+    //Controle l'activation de la simulation
+    if (!Global::isRunSimulation()) {
+        return true;
+    }
+
     //Mélange le conteneur d'atome
     Global::getAtomManager()->shuffle();
     size_t size = Global::getAtomManager()->getSize();
@@ -75,6 +80,7 @@ bool SimulationListener::frameRenderingQueued
         //Reset le compteur de temps
         _transformTimeCount = 
             SimulationListener::TRANSFORM_FREQ;
+        std::cout << "Size : " << Global::getAtomManager()->getSize() << std::endl;
     } else {
         //Incrémente le compteur de temps
         _transformTimeCount -= SimulationListener::STEP_TIME;
