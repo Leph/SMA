@@ -38,14 +38,23 @@ bool SimulationListener::frameRenderingQueued
                     Global::getAtomManager()->get(i)))
                 != 0
             ) {
+                //Lambda
                 _transforms.push_back(transform);
-            }
-            else if (
+            } else if (
                 (transform = Transform::
                     checkAndCreate<TransformBound>(
                     Global::getAtomManager()->get(i)))
                 != 0
             ) {
+                //Bound
+                _transforms.push_back(transform);
+            } else if (
+                (transform = Transform::
+                    checkAndCreate<TransformUnbound>(
+                    Global::getAtomManager()->get(i)))
+                != 0
+            ) {
+                //Unbound
                 _transforms.push_back(transform);
             }
         }

@@ -125,17 +125,24 @@ bool Atom::checkConstraintBonds
     return true;
 }
 
-bool Atom::isBoundTo(Atom* atom)
+bool Atom::isBoundTo(const Atom* atom) const
 {
     assert(atom != 0);
 
+    return findBondTo(atom) != 0;
+}
+
+Bond* Atom::findBondTo(const Atom* atom) const
+{
+    assert(atom != 0);
+    
     for(size_t i=0;i<_bonds.size();i++) {
         if (_bonds[i]->getOtherEnd(this) == atom) {
-            return true;
+            return _bonds[i];
         }
     }
 
-    return false;
+    return 0;
 }
         
 void Atom::transfertBonds(Atom* atom)

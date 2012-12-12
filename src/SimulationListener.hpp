@@ -42,7 +42,7 @@ class SimulationListener : public Ogre::FrameListener
          * Les transformations sont appliquées tous les
          * TRANSFORM_FREQ/STEP_TIME tours de boucle
          */
-        static const Ogre::Real TRANSFORM_FREQ = 10.0;
+        static const Ogre::Real TRANSFORM_FREQ = 2.0;
 
         /**
          * Compteur de temps pour l'application

@@ -88,7 +88,14 @@ class Atom
          * renvoi true si cet atome est
          * lié à un autre atome donné
          */
-        bool isBoundTo(Atom* atom);
+        bool isBoundTo(const Atom* atom) const;
+
+        /**
+         * Renvoi la liaison si cet atome est lié
+         * à l'atome spécifié
+         * Sinon renvoi 0
+         */
+        Bond* findBondTo(const Atom* atom) const;
 
         /**
          * Transfert les liaisons de cet atome
