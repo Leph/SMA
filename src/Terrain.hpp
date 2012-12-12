@@ -2,6 +2,7 @@
 #define TERRAIN_HPP
 
 #include <Ogre.h>
+#include "SceneObject.hpp"
 
 /**
  * Terrain
@@ -9,7 +10,7 @@
  * atoms
  * L'instance est Global
  */
-class Terrain
+class Terrain : public SceneObject
 {
     public:
 
@@ -18,11 +19,6 @@ class Terrain
          */
         Terrain();
         
-        /**
-         * Supprime le Node des données d'Ogre
-         */
-        ~Terrain();
-
         /**
          * Renvoi true si la sphere spéficiée entre en
          * collision avec les bords du terrain
@@ -42,12 +38,6 @@ class Terrain
          */
         Ogre::Real _subdivision;
         
-        /**
-         * Le noeud Ogre auquel est rataché la 
-         * représentation graphique du terrain
-         */
-        Ogre::SceneNode* _node;
-
         /**
          * Créer et initialise le Node Ogre pour
          * la représentation graphique

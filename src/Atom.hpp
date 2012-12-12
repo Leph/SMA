@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <Ogre.h>
+#include "SceneObject.hpp"
 #include "Bond.hpp"
 
 /**
@@ -10,7 +11,7 @@
  * Classe de base pour toutes les particules
  * classe Abstraite
  */
-class Atom
+class Atom : public SceneObject
 {
     public:
 
@@ -168,12 +169,6 @@ class Atom
          * Utilisé par la methode applyBrownian
          */
         Ogre::Real _brownianCounter;
-
-        /**
-         * Le noeud Ogre auquel est rataché la représentation
-         * graphique de l'atome
-         */
-        Ogre::SceneNode* _node;
 
         /**
          * Conteneur pour les liaisons

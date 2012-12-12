@@ -11,19 +11,12 @@ using Ogre::Math;
 Bond::Bond(Atom* a1, Atom* a2, Ogre::Real length) :
     _end1(a1),
     _end2(a2),
-    _length(length),
-    _node(0)
+    _length(length)
 {
     assert(a1 != 0 && a2 != 0);
     assert(a1 != a2);
     //Création de l'apparence graphique de la liaison
     initNode();
-}
-
-Bond::~Bond()
-{
-    _node->removeAllChildren();
-    Global::getSceneManager()->destroySceneNode(_node);
 }
 
 Real Bond::getLength() const
@@ -103,10 +96,10 @@ void Bond::remove()
 
 void Bond::initNode()
 {
-    ManualObject* manual = Geometry::cylinder(10);
+    _manual = Geometry::cylinder(10);
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
-    _node->attachObject(manual);
+    _node->attachObject(_manual);
     updateNode();
 }
 

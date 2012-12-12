@@ -2,11 +2,12 @@
 #define BOND_HPP
 
 #include <Ogre.h>
+#include "SceneObject.hpp"
 
 //Double header inclusion
 class Atom;
 
-class Bond
+class Bond : public SceneObject
 {
     public:
 
@@ -14,11 +15,6 @@ class Bond
          * Construit et initialise la liaison
          */
         Bond(Atom* a1, Atom* a2, Ogre::Real length);
-
-        /**
-         * Supprime le Node des données d'Ogre
-         */
-        ~Bond();
 
         /**
          * Renvoi la longueur de la liaison
@@ -71,12 +67,6 @@ class Bond
          * La distance de la liaison
          */
         Ogre::Real _length;
-
-        /**
-         * Le noeud Ogre auquel est rataché la représentation
-         * graphique de la liaison
-         */
-        Ogre::SceneNode* _node;
 
         /**
          * Créer et initialise le Node Ogre pour

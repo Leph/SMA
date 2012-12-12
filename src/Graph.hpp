@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <Ogre.h>
+#include "SceneObject.hpp"
 #include "Atoms.hpp"
 
 /**
@@ -10,7 +11,7 @@
  * utilisé lors des transformations
  * (réécriture d'étoile)
  */
-class Graph
+class Graph : public SceneObject
 {
     public:
 
@@ -130,12 +131,6 @@ class Graph
          * (Breadth-First Search)
          */
         std::list<size_t> _bfs;
-
-        /**
-         * Le noeud Ogre auquel est ratachée la représentation
-         * graphique du graph
-         */
-        Ogre::SceneNode* _node;
 
         /**
          * Distance de voisinage utilisée pour la

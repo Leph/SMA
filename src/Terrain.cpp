@@ -8,17 +8,10 @@ using Ogre::ManualObject;
 
 Terrain::Terrain() :
     _size(2000),
-    _subdivision(5),
-    _node(0)
+    _subdivision(5)
 {
     //Création de l'apparence graphique de l'atome
     initNode();
-}
-
-Terrain::~Terrain()
-{
-    _node->removeAllChildren();
-    Global::getSceneManager()->destroySceneNode(_node);
 }
 
 bool Terrain::checkCollision
@@ -32,10 +25,10 @@ bool Terrain::checkCollision
 
 void Terrain::initNode()
 {
-    ManualObject* manual = Geometry::terrain(_subdivision);
+    _manual = Geometry::terrain(_subdivision);
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
-    _node->attachObject(manual);
+    _node->attachObject(_manual);
     _node->setPosition(Vector3(0, 0, 0));
     _node->setScale(Vector3(_size, _size, _size));
 }

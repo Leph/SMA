@@ -10,8 +10,7 @@ Graph::Graph() :
     _vertices(),
     _states(),
     _edges(),
-    _bfs(),
-    _node(0)
+    _bfs()
 {
 }
 
@@ -73,11 +72,7 @@ void Graph::build(Atom* atom)
 void Graph::clear()
 {
     //Supprime la représentation graphique
-    if (_node != 0) {
-        _node->removeAllChildren();
-        Global::getSceneManager()->destroySceneNode(_node);
-        _node = 0;
-    }
+    clearSceneObject();
 
     //Désactive le fixed des atomes
     for (size_t i=0;i<_vertices.size();i++) {
@@ -225,24 +220,24 @@ void Graph::initNode()
 {
     assert(_node == 0);
 
-    ManualObject* manual = Global::getSceneManager()
+    _manual = Global::getSceneManager()
         ->createManualObject();
-    manual->begin(
+    _manual->begin(
         "BaseWhiteNoLighting", 
         Ogre::RenderOperation::OT_LINE_LIST
     );
     for (size_t i=0;i<_edges.size();i++) {
         for (size_t j=0;j<_edges[i].size();j++) {
-            manual->position(
+            _manual->position(
                 _vertices[i]->getPosition());
-            manual->position(
+            _manual->position(
                 _vertices[_edges[i][j]]->getPosition());
         }
     }
-    manual->end();
+    _manual->end();
 
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
-    _node->attachObject(manual);
+    _node->attachObject(_manual);
 }
 

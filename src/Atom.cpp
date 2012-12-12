@@ -19,7 +19,6 @@ Atom::Atom(Real radius, const Vector3& position) :
     _position(position),
     _brownianMotion(),
     _brownianCounter(),
-    _node(0),
     _bonds(),
     _isFixed(false),
     _index(-1)
@@ -35,10 +34,6 @@ Atom::Atom(Real radius, const Vector3& position) :
 
 Atom::~Atom()
 {
-    //Détruit le noeud de scene
-    _node->removeAllChildren();
-    Global::getSceneManager()->destroySceneNode(_node);
-
     //Détruit les liaisons associées
     while (!_bonds.empty()) {
         _bonds[0]->remove();
@@ -193,6 +188,8 @@ void Atom::setFixed(bool fixed)
 void Atom::initNode
     (ManualObject* manual, const ColourValue& colour)
 {
+    _manual = manual;
+
     //Détruit le noeud de scene si
     //déjà définie
     if (_node != 0) {
@@ -206,7 +203,7 @@ void Atom::initNode
      */
     _node = Global::getSceneManager()
         ->getRootSceneNode()->createChildSceneNode();
-    _node->attachObject(manual);
+    _node->attachObject(_manual);
     _node->setScale(
         Vector3(_radius, _radius, _radius));
     _node->setPosition(_position);
@@ -215,7 +212,7 @@ void Atom::initNode
     //Attache à l'entité un pointeur vers cette instance afin
     //de pouvoir récupérer l'objet Atom à partir du noeud
     //de scene
-    manual->getUserObjectBindings().setUserAny(
+    _manual->getUserObjectBindings().setUserAny(
         Any(this));
 
     //Conversion de la couleur en nom de 
@@ -226,10 +223,10 @@ void Atom::initNode
 
     //Création d'un nouveau matériel à partir du matériel
     //de base et mise à jour de la couleur
-    Ogre::MaterialPtr material = manual->getSection(0)
+    Ogre::MaterialPtr material = _manual->getSection(0)
         ->getMaterial().getPointer()->clone(materialName);
     material.getPointer()->setDiffuse(colour);
-    manual->getSection(0)->setMaterialName(materialName);
+    _manual->getSection(0)->setMaterialName(materialName);
 }
 
 Vector3 Atom::applyGravity()
