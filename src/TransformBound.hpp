@@ -1,7 +1,8 @@
 #ifndef TRANSFORMBOUND_HPP
 #define TRANSFORMBOUND_HPP
 
-#include "Transform.hpp"
+#include <Ogre.h>
+#include "Transforms.hpp"
 
 /**
  * Class TransformBound
@@ -21,6 +22,20 @@ class TransformBound : public Transform
          * Implémente doTransform
          */
         virtual bool doTransformStep();
+        
+        /**
+         * Renvoi true si l'atome donné
+         * est un atome d'action pour cette
+         * transformation
+         */
+        static bool isActionAtom(const Atom* atom);
+
+    private:
+
+        /**
+         * Longueur des liaisons créées
+         */
+        static const Ogre::Real BOND_LENGTH = 250;
 };
 
 #endif

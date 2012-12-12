@@ -1,7 +1,7 @@
 #include <vector>
 #include <assert.h>
 
-#include "Transform.hpp"
+#include "Transforms.hpp"
 #include "Global.hpp"
 
 using Ogre::Real;
@@ -114,10 +114,9 @@ void Transform::initTraversing()
     }
 }
 
-bool Transform::matchStar(const Star& src, const Star& dst, 
-    std::vector<size_t>& matches) const
+bool Transform::matchStar
+    (const Star& src, const Star& dst) const
 {
-    assert(matches.empty());
     size_t srcIndex = src.center();
     size_t dstIndex = dst.center();
     Atom* srcCenter = _graph->getVertex(srcIndex);
@@ -332,15 +331,6 @@ bool Transform::matchStar(const Star& src, const Star& dst,
         } 
         assert(dstMatching[srcMatching[i]] == i);
     }
-
-    //Sinon, les voisins de dst correspondants 
-    //sont insérés dans matches
-    for (size_t i=0;i<dstMatching.size();i++) {
-        if (dstMatching[i] != -1) {
-            matches.push_back(dstEdges[i]);
-        }
-    }
-    assert(matches.size() == srcEdges.size());
 
     return true;
 }

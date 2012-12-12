@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <Ogre.h>
+#include <assert.h>
 #include "Graph.hpp"
 #include "Star.hpp"
 
@@ -40,6 +41,37 @@ class Transform
          * pas fini
          */
         virtual bool doTransformStep() = 0;
+
+        /**
+         * Test si l'atome donné en argument
+         * peut être le centre de la transformation
+         * spécifiée. Si oui, renvoi la transformation
+         * valide, sinon, renvoi 0
+         * T doit être une sous classe de Transform
+         */
+        template<class T>
+        static Transform* checkAndCreate(Atom* atom) {
+            //Construit et test si la transformation est
+            //valide
+            //La désallocation de la transformation
+            //désalloue aussi le graph
+            assert(atom != 0);
+            if (T::isActionAtom(atom) && 
+                !atom->isFixed()
+            ) {
+                Graph* graph = new Graph();
+                graph->build(atom);
+                Transform* transform = new T(graph);
+                if (transform->isValid()) {
+                    return transform;
+                } else {
+                    delete transform;
+                    return 0;
+                }
+            } else {
+                return 0;
+            }
+        }
 
     protected:
 
@@ -100,12 +132,9 @@ class Transform
         /**
          * Renvoi true si l'étoile src représente 
          * l'étoile dst, false sinon
-         * Si il y a correspondance, les indices
-         * (dans le graph) des atomes voisins de dst 
-         * ayant correspondus sont insérés dans matches
          */
-        bool matchStar(const Star& src, const Star& dst, 
-            std::vector<size_t>& matches) const;
+        bool matchStar
+            (const Star& src, const Star& dst) const;
 
         /**
          * Remplace l'atome dst par l'atome src

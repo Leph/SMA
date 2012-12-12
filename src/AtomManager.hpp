@@ -65,7 +65,7 @@ class AtomManager
 
         /**
          * Créer une nouvelle liaison entre les
-         * deux atomes donnée
+         * deux atomes donnés
          */
         void createBond
             (Atom* a1, Atom* a2, Ogre::Real length);

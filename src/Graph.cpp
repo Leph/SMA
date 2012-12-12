@@ -233,32 +233,6 @@ void Graph::initNode()
                 _vertices[i]->getPosition());
             manual->position(
                 _vertices[_edges[i][j]]->getPosition());
-
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(0, 10, 0));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(0, 10, 0));
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(10, 0, 0));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(10, 0, 0));
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(0, 0, 10));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(0, 0, 10));
-            
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(0, -10, 0));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(0, -10, 0));
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(-10, 0, 0));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(-10, 0, 0));
-            manual->position(
-                _vertices[i]->getPosition()+Vector3(0, 0, -10));
-            manual->position(
-                _vertices[_edges[i][j]]->getPosition()+Vector3(0, 0, -10));
         }
     }
     manual->end();

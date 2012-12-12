@@ -1,7 +1,7 @@
 #ifndef TRANSFORMLAMBDA_HPP
 #define TRANSFORMLAMBDA_HPP
 
-#include "Transform.hpp"
+#include "Transforms.hpp"
 
 /**
  * Class TransformLambda
@@ -21,6 +21,13 @@ class TransformLambda : public Transform
          * Implémente doTransform
          */
         virtual bool doTransformStep();
+
+        /**
+         * Renvoi true si l'atome donné
+         * est un atome d'action pour cette
+         * transformation
+         */
+        static bool isActionAtom(const Atom* atom);
 };
 
 #endif

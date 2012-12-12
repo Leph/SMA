@@ -1,7 +1,7 @@
 #include <vector>
 #include <assert.h>
 
-#include "TransformLambda.hpp"
+#include "Transforms.hpp"
 #include "Atoms.hpp"
 
 TransformLambda::TransformLambda(Graph* graph) :
@@ -26,12 +26,10 @@ bool TransformLambda::doTransformStep()
     }
 
     //Test pour tous les patterns src
-    std::vector<size_t> matches;
     for (size_t i=0;i<_src.size();i++) {
-        matches.clear();
         //Test du pattern d'étoile
-        if (matchStar(_src[i], Star(index), matches)) {
-            std::cout << "Matches" << std::endl;
+        if (matchStar(_src[i], Star(index))) {
+            std::cout << "Lambda Matches" << std::endl;
             //Remplace le centre de l'étoile ayant matché
             //avec le centre de l'étoile dst
             bool success = 
@@ -45,5 +43,11 @@ bool TransformLambda::doTransformStep()
     }
 
     return true;
+}
+
+bool TransformLambda::isActionAtom(const Atom* atom)
+{
+    assert(atom != 0);
+    return atom->isType<Atom_Lambda>();
 }
 

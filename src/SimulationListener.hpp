@@ -4,7 +4,7 @@
 #include <vector>
 #include <Ogre.h>
 #include "Graph.hpp"
-#include "Transform.hpp"
+#include "Transforms.hpp"
 
 /**
  * Gestion de la dynamique de la simulation

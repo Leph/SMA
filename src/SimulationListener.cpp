@@ -1,7 +1,6 @@
 #include "SimulationListener.hpp"
 #include "Global.hpp"
 #include "Atoms.hpp"
-#include "TransformLambda.hpp"
 
 using Ogre::FrameEvent;
 
@@ -32,26 +31,22 @@ bool SimulationListener::frameRenderingQueued
     if (_transformTimeCount <= 0.0) {
         //Cherches des transformations à appliquées
         for (size_t i=0;i<size;i++) {
+            Transform* transform = 0;
             if (
-                Global::getAtomManager()->get(i)
-                    ->isType<Atom_Lambda>() &&
-                !Global::getAtomManager()->get(i)
-                    ->isFixed()
+                (transform = Transform::
+                    checkAndCreate<TransformLambda>(
+                    Global::getAtomManager()->get(i)))
+                != 0
             ) {
-                //Ajoute le graphe si la transformation 
-                //est valide
-                Graph* graph = new Graph();
-                graph->build(Global::getAtomManager()
-                    ->get(i));
-                Transform* transform = 
-                    new TransformLambda(graph);
-                if (transform->isValid()) {
-                    _transforms.push_back(transform);
-                } else {
-                    //La désallocation de la transformation
-                    //désalloue la graphe
-                    delete transform;
-                }
+                _transforms.push_back(transform);
+            }
+            else if (
+                (transform = Transform::
+                    checkAndCreate<TransformBound>(
+                    Global::getAtomManager()->get(i)))
+                != 0
+            ) {
+                _transforms.push_back(transform);
             }
         }
         //Avance d'une étape toutes les transformations 
