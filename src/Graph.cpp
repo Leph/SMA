@@ -85,8 +85,12 @@ void Graph::clear()
     }
 
     //Supprime les données
+    _bfs.clear();
     _vertices.clear();
     _states.clear();
+    for (size_t i=0;i<_edges.size();i++) {
+        _edges[i].clear();
+    }
     _edges.clear();
 }
         

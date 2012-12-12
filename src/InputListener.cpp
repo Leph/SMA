@@ -33,6 +33,8 @@ InputListener::InputListener
 
 InputListener::~InputListener()
 {
+    _inputManager->destroyInputObject(_mouse);
+    _inputManager->destroyInputObject(_keyboard);
     WindowEventUtilities::removeWindowEventListener(
         _window, this);
     windowClosed(_window);
