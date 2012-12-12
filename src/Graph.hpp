@@ -138,7 +138,7 @@ class Graph : public SceneObject
          * Le graphe local inclura tous les atomes
          * dans la sphère définie
          */
-        static const Ogre::Real DISTANCE_NEIGHBOURHOOD = 800;
+        static const Ogre::Real DISTANCE_NEIGHBOURHOOD = 600;
 
         /**
          * Distance de seuil utilisée pour la construction
@@ -146,7 +146,7 @@ class Graph : public SceneObject
          * Si la distance entre deux atomes est inférieure
          * à cette distance, une arrête est créée
          */
-        static const Ogre::Real DISTANCE_EDGE = 600;
+        static const Ogre::Real DISTANCE_EDGE = 400;
 
         /**
          * Ajoute le sommet spécifié

@@ -6,6 +6,8 @@ using Ogre::FrameEvent;
 
 SimulationListener::SimulationListener() :
     _transformTimeCount(SimulationListener::TRANSFORM_FREQ),
+    _transformSearchTimeCount(
+        SimulationListener::TRANSFORM_SEARCH_FREQ),
     _transforms()
 {
 }
@@ -28,8 +30,8 @@ bool SimulationListener::frameRenderingQueued
             ->move(SimulationListener::STEP_TIME);
     }
 
-    if (_transformTimeCount <= 0.0) {
-        //Cherches des transformations à appliquées
+    //Cherches des transformations à appliquées
+    if (_transformSearchTimeCount <= 0.0) {
         for (size_t i=0;i<size;i++) {
             Transform* transform = 0;
             if (
@@ -58,6 +60,15 @@ bool SimulationListener::frameRenderingQueued
                 _transforms.push_back(transform);
             }
         }
+        //Reset le compteur de temps
+        _transformSearchTimeCount = 
+            SimulationListener::TRANSFORM_SEARCH_FREQ;
+    } else {
+        //Décrémente le compteur de temps
+        _transformSearchTimeCount -= 
+            SimulationListener::STEP_TIME;
+    }
+    if (_transformTimeCount <= 0.0) {
         //Avance d'une étape toutes les transformations 
         //en cours
         //et supprime les transformations finies
@@ -77,7 +88,7 @@ bool SimulationListener::frameRenderingQueued
         _transformTimeCount = 
             SimulationListener::TRANSFORM_FREQ;
     } else {
-        //Incrémente le compteur de temps
+        //Décrémente le compteur de temps
         _transformTimeCount -= SimulationListener::STEP_TIME;
     }
 

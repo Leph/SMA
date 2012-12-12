@@ -45,12 +45,24 @@ class SimulationListener : public Ogre::FrameListener
         static const Ogre::Real TRANSFORM_FREQ = 2.0;
 
         /**
+         * Temps entre deux recherche de création 
+         * de nouvelles transformation
+         */
+        static const Ogre::Real TRANSFORM_SEARCH_FREQ = 10.0;
+
+        /**
          * Compteur de temps pour l'application
          * des transformation
          * Les transformations sont appliquées quand le
          * compteur atteint 0
          */
         Ogre::Real _transformTimeCount;
+        
+        /**
+         * Compteur de temps pour la recherche
+         * de nouvelles transformations
+         */
+        Ogre::Real _transformSearchTimeCount;
 
         /**
          * Container des transformations 

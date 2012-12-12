@@ -205,12 +205,14 @@ void Graph::addEdge(size_t index1, size_t index2)
     );
     //Vérifie que l'arrête n'est pas déjà présente
     //dans le graphe
+    #ifndef NDEBUG
     for (size_t i=0;i<_edges[index1].size();i++) {
         assert(_edges[index1][i] != index2);
     }
     for (size_t i=0;i<_edges[index2].size();i++) {
         assert(_edges[index2][i] != index1);
     }
+    #endif
 
     _edges[index1].push_back(index2);
     _edges[index2].push_back(index1);

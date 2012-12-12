@@ -7,7 +7,7 @@ using Ogre::Vector3;
 using Ogre::ManualObject;
 
 Terrain::Terrain() :
-    _size(2000),
+    _size(4000),
     _subdivision(5)
 {
     //Création de l'apparence graphique de l'atome

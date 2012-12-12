@@ -122,7 +122,7 @@ void Application::createCamera()
     _camera->setPosition(Vector3(1000,1000,1000));
     _camera->lookAt(Vector3(0,-1000,0));
     _camera->setNearClipDistance(1);
-    _camera->setFarClipDistance(10000);
+    _camera->setFarClipDistance(100000);
 
     Viewport* vp = _window->addViewport(_camera);
     _camera->setAspectRatio(Real(vp->getActualWidth())/Real(vp->getActualHeight()));
@@ -181,7 +181,7 @@ void Application::initSimulation()
     SceneNode* node = _scene->getRootSceneNode()->createChildSceneNode();
     node->attachObject(ent);
 
-    for (int i=0;i<500;i++) {
+    for (int i=0;i<2000;i++) {
         Vector3 position = Vector3(
             Math::RangeRandom(-1500, 1500),
             Math::RangeRandom(-1500, 1500),
